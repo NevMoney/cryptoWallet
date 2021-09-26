@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <title>Crypto Wallet</title>
+
+    <!-- BOOTSTRAP -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- STYLE SHEETS -->
+    <link rel="stylesheet" href="css/signin.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- MORALIS -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://unpkg.com/moralis/dist/moralis.js"></script>
+  </head>
+  <body>
+    <main class="form-signin">
+      <img class="mb-4" src="wallet.png" alt="wallet icon" width="250" />
+      <h1>Sign In</h1>
+
+      <div class="form-floating">
+        <input
+          type="text"
+          class="form-control"
+          id="user-username"
+          placeholder="Username"
+          autofocus
+        />
+      </div>
+      <div class="form-floating">
+        <input
+          type="email"
+          class="form-control"
+          id="user-email"
+          placeholder="name@example.com"
+        />
+      </div>
+      <button id="btn-login" class="w-100 btn btn-lg btn-primary" type="submit">
+        Login or Register
+      </button>
+      <footer>
+        <p class="mt-5 mb-3 text-muted">&copy; 2021 - Present</p>
+      </footer>
+    </main>
+
+    <script src="main.js"></script>
+  </body>
+</html>
