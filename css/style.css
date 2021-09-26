@@ -24,8 +24,29 @@
 a {
   cursor: pointer;
 }
+
+.outer.nfts {
+  width: 100%;
+}
+
+.inner.nfts {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: flex-start;
+}
+
 .card.col-md-4.nfts {
   cursor: pointer;
+  flex-basis: calc(33.33% - 40px);
+  margin: 5px;
+  box-sizing: border-box;
+  width: 350px;
+}
+
+.card-img-top.nfts {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
 }
 
 .card.col-md-4.nfts:hover {
@@ -57,4 +78,9 @@ a {
 
 footer {
   margin-top: 50px;
+}
+
+h2 {
+  padding: 20px;
+  color: #6b62fd;
 }

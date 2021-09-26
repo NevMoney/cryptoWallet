@@ -35,7 +35,8 @@ body {
   width: 100%;
 }
 
-#btn-login {
+#btn-login,
+#btn-toDashboard {
   margin-top: 10px;
   background-color: #6b62fd;
   color: whitesmoke;
@@ -47,7 +48,8 @@ body {
   width: 90%;
 }
 
-#btn-login:hover {
+#btn-login:hover,
+#btn-toDashboard:hover {
   background-color: #4d44ff;
   color: whitesmoke;
   border-color: #6b62fd;
