@@ -75,7 +75,6 @@ const fixURL = (url) => {
 
 const clearContent = (id) => {
   let _id = `#${id}`
-  console.log(_id)
   document.querySelector(_id).innerHTML = ''
 }
 
@@ -108,13 +107,43 @@ const showContent = (el) => {
 
 //WEB3API FUNCTIONS
 const getTransactions = async () => {
-  // The transactions are hardcoded to retrieve only rinkeby transactions.
-  // you can change that here:
-  // const options = { chain: 'rinkeby' }
-  let options
+  let chain = $('#transactions-chain').val()
+  console.log('chain', chain)
+  const options = { chain: chain }
   const transactions = await Moralis.Web3API.account.getTransactions(options)
+  console.log(transactions)
+
+  // dynamically look up the chain and redirect the url to the correct page
+  let url = ''
+  if (chain == 'eth') {
+    url = 'https://etherscan.io/tx/'
+  } else if (chain == 'rinkeby') {
+    url = 'https://rinkeby.etherscan.io/tx/'
+  } else if (chain == 'bsc') {
+    url = 'https://bscscan.com/tx/'
+  } else if (chain == 'matic') {
+    url = 'https://polygonscan.com/tx/'
+  } else if (chain == 'avalanche') {
+    url = 'https://explorer.avax.network/tx/'
+  }
+
+  $('#transactions-amount').empty()
+  $('#transactions-amount').show()
+
+  if (transactions.total === 0) {
+    $('#table-of-fransactions').empty()
+    $('#transactions-amount').append(
+      `<p>No transactions found for your account on ${chain} chain.</p>`,
+    )
+  } else {
+    $('#transactions-amount').append(
+      `<p>Total transactions: ${transactions.total}</p>`,
+    )
+  }
 
   if (transactions.total > 0) {
+    $('#table-of-fransactions').empty()
+    $('#table-of-fransactions').show()
     let table = `
         <table class="table">
           <thead>
@@ -135,20 +164,16 @@ const getTransactions = async () => {
         `
     // document.querySelector('#table-of-fransactions').innerHTML = table
     $('#table-of-fransactions').append(table)
-    $('#table-of-fransactions').show()
 
     transactions.result.forEach((t) => {
-      console.log('transactions', t)
       let content = `
             <tr>
-                <td><a href='https://rinkeby.etherscan.io/tx/${
-                  t.hash
-                }' target="_blank" rel="noopener noreferrer">${t.hash}</a></td>
-                <td><a href='https://rinkeby.etherscan.io/block/${
-                  t.block_number
-                }' target="_blank" rel="noopener noreferrer">${
+                <td><a href='${url}${
+        t.hash
+      }' target="_blank" rel="noopener noreferrer">${t.hash}</a></td>
+                <td><a href='${url}${
         t.block_number
-      }</a></td>
+      }' target="_blank" rel="noopener noreferrer">${t.block_number}</a></td>
                 <td>${millisecondsToTime(
                   Date.parse(new Date()) - Date.parse(t.block_timestamp),
                 )}</td>
@@ -612,6 +637,7 @@ if (window.location.href == dashboard) {
 
   $('#btn-clear-transactions').on('click', function () {
     $('#table-of-fransactions').hide()
+    $('#transactions-amount').hide()
   })
 }
 

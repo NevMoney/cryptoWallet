@@ -143,6 +143,17 @@
             <!-- Transactions -->
             <div id="transactionsSection">
               <h2>Transactions</h2>
+              <div class="col-md-6">
+                <select id="transactions-chain" class="form-select">
+                  <option value="none" selected>Select a chain?</option>
+                  <option value="eth">Ethereum Mainnet</option>
+                  <option value="bsc">Binance Mainnet</option>
+                  <option value="matic">Polygon Mainnet</option>
+                  <option value="avalanche">Avalanche Mainnet</option>
+                  <option value="rinkeby">Rinkeby</option>
+                </select>
+              </div>
+              <br />
               <div class="the-buttons">
                 <button
                   class="btn btn-primary col-md-4"
@@ -160,14 +171,13 @@
               </div>
               <div class="m-3 text-center h6">
                 <p>
-                  The transactions from this code come from the rinkeby chain.
+                  Select the chain to view your transactions.
                   <br />
-                  This means the links below will go off to the rinkeby
-                  etherscan.
-                  <br />
-                  You can change the chain in the main.js file
+                  CHANGE THE LINKS FOR TRANSACTIONS to go to the right chain
+                  (see main.js line 155 and on)
                 </p>
               </div>
+              <div id="transactions-amount"></div>
               <div id="table-of-fransactions" class="table-responsive"></div>
             </div>
             <!-- Balances -->
