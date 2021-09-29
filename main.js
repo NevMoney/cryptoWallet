@@ -75,6 +75,7 @@ const fixURL = (url) => {
 
 const clearContent = (id) => {
   let _id = `#${id}`
+  console.log(_id)
   document.querySelector(_id).innerHTML = ''
 }
 
@@ -116,23 +117,28 @@ const getTransactions = async () => {
   if (transactions.total > 0) {
     let table = `
         <table class="table">
-        <thead>
-        <tr>
-        <th scope="col">Transaction</th>
-        <th scope="col">Block Number</th>
-        <th scope="col">Age</th>
-        <th scope="col">Type</th>
-        <th scope="col">Fee</th>
-        <th scope="col">Value</th>
+          <thead>
+            <tr>
+              <th scope="col">Transaction</th>
+              <th scope="col">Block Number</th>
+              <th scope="col">Age</th>
+              <th scope="col">Type</th>
+              <th scope="col">Fee</th>
+              <th scope="col">Value</th>
+              <th scope="col">To</th>
+              <th scope="col">From</th>
             </tr>
-        </thead>
+          </thead>
         <tbody id="theTransactions">
         </tbody>
         </table>
         `
-    document.querySelector('#table-of-fransactions').innerHTML = table
+    // document.querySelector('#table-of-fransactions').innerHTML = table
+    $('#table-of-fransactions').append(table)
+    $('#table-of-fransactions').show()
 
     transactions.result.forEach((t) => {
+      console.log('transactions', t)
       let content = `
             <tr>
                 <td><a href='https://rinkeby.etherscan.io/tx/${
@@ -153,6 +159,8 @@ const getTransactions = async () => {
                 }</td>
                 <td>${((t.gas * t.gas_price) / 1e18).toFixed(5)} ETH</td>
                 <td>${(t.value / 1e18).toFixed(5)} ETH</td>
+                <td>${t.to_address}</td>
+                <td>${t.from_address}</td>
             </tr>
             `
       theTransactions.innerHTML += content
@@ -597,9 +605,14 @@ if (window.location.href == dashboard) {
   let buttons = document.getElementsByClassName('clearButton')
   for (var i = 0; i <= buttons.length - 1; i += 1) {
     buttons[i].onclick = function (e) {
+      console.log('clearButton', buttons[i], this.name)
       clearContent(this.name)
     }
   }
+
+  $('#btn-clear-transactions').on('click', function () {
+    $('#table-of-fransactions').hide()
+  })
 }
 
 // HOMEPAGE LISTENERS
