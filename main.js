@@ -248,6 +248,8 @@ const getNativeBalances = async () => {
         </tbody>
     </table>
     `)
+
+  $('#userEthBalance').append(content)
 }
 
 const getERC20Balances = async () => {
@@ -507,17 +509,32 @@ const displaytransferNFTs = () => {
 // TRANSFER FUNCTIONS
 const transferETH = async () => {
   let _amount = String(document.querySelector('#amountOfETH').value)
-  let _address = document.querySelector('#addressToReceive').value
+  let _address = $('#addressToReceive').val()
 
   const options = {
     type: 'native',
     amount: Moralis.Units.ETH(_amount),
     receiver: _address,
   }
-  let result = await Moralis.transfer(options)
-  alert(
-    `transferring ${_amount} ETH to your requested address. Please allow some time to process your transaction.`,
-  )
+
+  $('.spinner-border').show()
+
+  try {
+    let result = await Moralis.transfer(options)
+
+    if (result) {
+      $('.spinner-border').hide()
+      $('#userEthBalance').empty()
+      $('#userEthBalance').append(
+        `<p class="h5 m-3 text-center">You have successfully transferred ${_amount} ETH to ${_address}</p>`,
+      )
+      $('#userEthBalance').show()
+    } else {
+      $('#userEthBalance').text(result.message)
+    }
+  } catch (error) {
+    console.error(error.message)
+  }
 }
 
 const transferERC20 = async () => {
@@ -625,6 +642,10 @@ if (window.location.href == dashboard) {
   document.querySelector(
     '#transferERC20GetBalances',
   ).onclick = getTransferERC20Balances
+
+  $('#transfer-ETH').on('click', function () {
+    getNativeBalances()
+  })
 
   // Class listeners
   let buttons = document.getElementsByClassName('clearButton')

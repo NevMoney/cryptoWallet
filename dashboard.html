@@ -285,16 +285,18 @@
           <div id="section2">
             <!-- ETH transfer -->
             <div class="container" id="transferETH">
-              <p>
-                This function will allow you to transfer ETH between accounts.
-                Make sure your metamask is logged into the account and chain you
-                want to use If you are on the Rinkeby chain, this will be a
-                Rinkeby transaction If you are on the Ropsten chain, this will
-                be a Ropsten transaction If you are on the Ethereum Mainnet,
-                this will be a mainnet transaction
+              <p class="text-center">
+                Easily transfer ETH to anyone, anywhere, anytime.
+              </p>
+              <p class="text-center text-muted">
+                Select the correct address from which to send and chain in your
+                metamask before making the transaction. To test the transfer
+                using Rinkeby, sure you select Rinkeby in metamask. For actual
+                ETH transfers, ensure you are on the Ethereum Mainnet.
               </p>
               <h2>Transfer ETH</h2>
               <div id="TransferETHSection" class="container">
+                <div id="userEthBalance"></div>
                 <div class="form-group col-md-12">
                   <input
                     type="number"
@@ -309,23 +311,27 @@
                     type="text"
                     class="form-control"
                     id="addressToReceive"
-                    placeholder="Who gets the money?"
+                    placeholder="Address receiving the funds"
                   />
                   <small class="form-text text-muted">
-                    Please choose correctly to avoid losing your coins
+                    Please double check the address to avoid losing your coins.
                   </small>
                 </div>
+                <!-- spinner -->
+                <div
+                  class="spinner-border text-primary text-center"
+                  role="status"
+                  style="display: none;"
+                ></div>
+                <br />
                 <button
                   id="ETHTransferButton"
                   type="submit"
                   class="btn btn-primary"
                 >
-                  GoGoGo
+                  Transfer ETH
                 </button>
               </div>
-              <p>
-                Address to receive: 0xf67173BCD45c640C6a5573bE86fe267B3F9Fb65D
-              </p>
             </div>
 
             <!-- ERC20 transfer -->
