@@ -172,10 +172,9 @@
               <div class="m-3 text-center h6">
                 <p>
                   Select the chain to view your transactions.
-                  <br />
-                  CHANGE THE LINKS FOR TRANSACTIONS to go to the right chain
-                  (see main.js line 155 and on)
                 </p>
+                <!-- CHANGE THE LINKS FOR TRANSACTIONS to go to the right chain
+                  (see main.js line 155 and on) -->
               </div>
               <div id="transactions-amount"></div>
               <div id="table-of-fransactions" class="table-responsive"></div>
@@ -222,7 +221,7 @@
               </div>
               <div class="m-3 text-center h6">
                 <p>
-                  We only support balances from your rinkeby, ropste, Ethereum,
+                  We only support balances from your Rinkeby, Ropsten, Ethereum,
                   Avalanche, Polygon, and Binance account.
                 </p>
               </div>
@@ -296,7 +295,6 @@
               </p>
               <h2>Transfer ETH</h2>
               <div id="TransferETHSection" class="container">
-                <div id="userEthBalance"></div>
                 <div class="form-group col-md-12">
                   <input
                     type="number"
@@ -337,21 +335,15 @@
             <!-- ERC20 transfer -->
             <div id="transferERC20" class="col-md-12">
               <h2>Transfer ERC20</h2>
-              <div class="m-3 text-center h6">
-                <p>
-                  You may want to play with how this page displays, but here's a
-                  quick start guide:
-                  <br />
-                  - Click 'Get balances'
-                  <br />
-                  - Click the Transfer button next to the token you want to
-                  transfer
-                  <br />
-                  - Enter the 'amount of tokens' and the 'receiver address'
-                  <br />
-                  - Hit GoGoGo
+              <div>
+                <p class="m-3 text-center h6">
+                  You can send any ERC20 token you own to anyone, anywhere,
+                  anytime, quickly and easily. Simply check your token balance
+                  by clicking "Get Balances" button and from there select the
+                  token you want to send.
                 </p>
               </div>
+              <div id="erc20TransferNotice"></div>
               <div class="d-flex">
                 <div id="TransferERC20Section" class="container col-md-6">
                   <div class="form-group col-md-12 mb-3">
@@ -378,9 +370,12 @@
                     />
                   </div>
 
-                  <div class="form-group col-md-12 mb-3">
+                  <div
+                    class="form-group col-md-12 mb-3 hiddenInput"
+                    style="display: none;"
+                  >
                     <label for="ERC20TransferDecimals">
-                      How many decimals does the token you want to send have?
+                      ERC20 token contract decimals
                     </label>
                     <input
                       type="number"
@@ -390,9 +385,12 @@
                       placeholder="Token decimals"
                     />
                   </div>
-                  <div class="form-group col-md-12 mb-3">
+                  <div
+                    class="form-group col-md-12 mb-3 hiddenInput"
+                    style="display: none;"
+                  >
                     <label for="ERC20TransferContract">
-                      What's the ERC20 token contract address?
+                      ERC20 token contract address
                     </label>
                     <input
                       type="text"
@@ -406,11 +404,25 @@
                     type="submit"
                     class="btn btn-primary col-md-12"
                   >
-                    GoGoGo
+                    Submit
                   </button>
                 </div>
 
                 <div class="container mt-3 col-md-6">
+                  <button
+                    id="transferERC20GetBalances"
+                    class="btn btn-secondary col-md-12"
+                  >
+                    Get Token Balances
+                  </button>
+                  <!-- spinner -->
+                  <div
+                    class="spinner-border text-primary text-center"
+                    role="status"
+                    style="display: none;"
+                  ></div>
+                  <!-- METADATA FOR ERC20 STARTS HERE
+                  =========================================================
                   <a
                     class="btn btn-secondary col-12"
                     data-bs-toggle="collapse"
@@ -465,31 +477,29 @@
                         <div id="ERC20Metadata"></div>
                       </div>
                     </div>
-                  </div>
+                  </div>-->
                 </div>
               </div>
               <hr />
+              <!-- Get Balances of Tokens Address Holds -->
               <div class="container">
                 <div class="table-responsive">
-                  <table class="table" id="transferERC20BalanceTable">
+                  <table
+                    class="table"
+                    id="transferERC20BalanceTable"
+                    style="display: none;"
+                  >
                     <thead>
                       <tr>
                         <th scope="col">Name</th>
                         <th scope="col">Symbol</th>
                         <th scope="col">Balance</th>
-                        <th scope="col">Decimals</th>
-                        <th scope="col">Contract Address</th>
+                        <th scope="col">Chain</th>
                         <th scope="col">Transfer</th>
                       </tr>
                     </thead>
                     <tbody id="transferERC20Balances"></tbody>
                   </table>
-                  <button
-                    id="transferERC20GetBalances"
-                    class="btn btn-secondary col-md-12"
-                  >
-                    Get balances
-                  </button>
                 </div>
               </div>
             </div>

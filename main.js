@@ -1,5 +1,3 @@
-console.log('hello world')
-
 // MY SERVER
 Moralis.initialize('y7bQ8aZvO2XR51Scwuafav2tJ13V0qDQpqw90TXd')
 Moralis.serverURL = 'https://zrsca4lyqk9t.moralishost.com:2053/server'
@@ -107,8 +105,14 @@ const showContent = (el) => {
 
 //WEB3API FUNCTIONS
 const getTransactions = async () => {
+  console.log('get transaction button hit')
   let chain = $('#transactions-chain').val()
   console.log('chain', chain)
+  if (chain == 'none') {
+    alert('Please select a chain')
+    return
+  }
+
   const options = { chain: chain }
   const transactions = await Moralis.Web3API.account.getTransactions(options)
   console.log(transactions)
@@ -211,7 +215,7 @@ const getNativeBalances = async () => {
     chain: 'matic',
   })
 
-  let content = (document.querySelector('#userBalances').innerHTML = `
+  $('#userBalances').append(`
     <table class="table">
         <thead>
             <tr>
@@ -248,8 +252,6 @@ const getNativeBalances = async () => {
         </tbody>
     </table>
     `)
-
-  $('#userEthBalance').append(content)
 }
 
 const getERC20Balances = async () => {
@@ -549,8 +551,22 @@ const transferERC20 = async () => {
     receiver: _address,
     contract_address: _contract,
   }
-  let result = await Moralis.transfer(options)
-  console.log(result)
+  $('.spinner-border').show()
+  try {
+    let result = await Moralis.transfer(options)
+    if (result) {
+      $('.spinner-border').hide()
+      $('#erc20TransferNotice').append(
+        `<p class="h5 m-3 text-center">You have successfully transferred ${_amount} to ${_address}</p>`,
+      )
+      $('#erc20TransferNotice').show()
+      console.log(result)
+    } else {
+      $('#erc20TransferNotice').text(result.message)
+    }
+  } catch (error) {
+    console.error(error.message)
+  }
 }
 
 const getTransferERC20Balances = async () => {
@@ -561,53 +577,169 @@ const getTransferERC20Balances = async () => {
   let rinkebyTokens = await Moralis.Web3API.account.getTokenBalances({
     chain: 'rinkeby',
   })
+  let avalancheTokens = await Moralis.Web3API.account.getTokenBalances({
+    chain: 'avalanche',
+  })
+  let binanceTokens = await Moralis.Web3API.account.getTokenBalances({
+    chain: 'bsc',
+  })
+  let polygonTokens = await Moralis.Web3API.account.getTokenBalances({
+    chain: 'matic',
+  })
 
   let balancesContent = document.querySelector('#transferERC20Balances')
   balancesContent.innerHTML = ''
 
-  if (ethTokens.length > 0) {
-    // Enter your ETH mainnet code here - I only worked with rinkeby (see below)
-  }
-  if (ropstenTokens.length > 0) {
-    // Enter your ropsten testnet code here - I only worked with rinkeby (see below)
-  }
-  if (rinkebyTokens.length > 0) {
-    let tokenBalanceContent = ''
+  let tokenBalanceContent = ''
 
-    rinkebyTokens.forEach((e, i) => {
+  if (ethTokens.length > 0) {
+    console.log('eth', ethTokens.length)
+    ethTokens.forEach((e, i) => {
+      // to add decimals and address input the following in the table
+      //  <td>${e.decimals}</td>
+      // <td>${e.token_address}</td>
       let content = `
-    
                 <tr>
                 <td>${e.name}</td>
                 <td>${e.symbol}</td>
                 <td>${e.balance / ('1e' + e.decimals)} </td>
-                <td>${e.decimals}</td>
-                <td>${e.token_address}</td>
+                <td>Ethereum Mainnet</td>
                 <td><button class="btn btn-primary transfer-button col-md-12" data-decimals="${
                   e.decimals
-                }" data-address="${e.token_address}">Transfer ${
-        e.symbol
-      }</button></td>
+                }" data-address="${e.token_address}">Transfer ${e.symbol}
+                </button></td>
                 </tr>
     
                 `
       tokenBalanceContent += content
     })
-    balancesContent.innerHTML += tokenBalanceContent
-
-    setTimeout(function () {
-      let theBalances = document.getElementsByClassName('transfer-button')
-
-      for (let i = 0; i <= theBalances.length - 1; i++) {
-        theBalances[i].onclick = function () {
-          document.querySelector('#ERC20TransferDecimals').value =
-            theBalances[i].attributes[1].value
-          document.querySelector('#ERC20TransferContract').value =
-            theBalances[i].attributes[2].value
-        }
-      }
-    }, 1000)
   }
+  if (polygonTokens.length > 0) {
+    console.log('eth', polygonTokens.length)
+    polygonTokens.forEach((e, i) => {
+      // to add decimals and address input the following in the table
+      //  <td>${e.decimals}</td>
+      // <td>${e.token_address}</td>
+      let content = `
+                <tr>
+                <td>${e.name}</td>
+                <td>${e.symbol}</td>
+                <td>${e.balance / ('1e' + e.decimals)} </td>
+                <td>Polygon</td>
+                <td><button class="btn btn-primary transfer-button col-md-12" data-decimals="${
+                  e.decimals
+                }" data-address="${e.token_address}">Transfer ${e.symbol}
+                </button></td>
+                </tr>
+    
+                `
+      tokenBalanceContent += content
+    })
+  }
+  if (binanceTokens.length > 0) {
+    console.log('eth', binanceTokens.length)
+    binanceTokens.forEach((e, i) => {
+      // to add decimals and address input the following in the table
+      //  <td>${e.decimals}</td>
+      // <td>${e.token_address}</td>
+      let content = `
+                <tr>
+                <td>${e.name}</td>
+                <td>${e.symbol}</td>
+                <td>${e.balance / ('1e' + e.decimals)} </td>
+                <td>Binance</td>
+                <td><button class="btn btn-primary transfer-button col-md-12" data-decimals="${
+                  e.decimals
+                }" data-address="${e.token_address}">Transfer ${e.symbol}
+                </button></td>
+                </tr>
+    
+                `
+      tokenBalanceContent += content
+    })
+  }
+  if (ropstenTokens.length > 0) {
+    console.log('ropsten', ropstenTokens.length)
+    ropstenTokens.forEach((e, i) => {
+      // to add decimals and address input the following in the table
+      //  <td>${e.decimals}</td>
+      // <td>${e.token_address}</td>
+      let content = `
+                <tr>
+                <td>${e.name}</td>
+                <td>${e.symbol}</td>
+                <td>${e.balance / ('1e' + e.decimals)} </td>
+                <td>Ropsten</td>
+                <td><button class="btn btn-primary transfer-button col-md-12" data-decimals="${
+                  e.decimals
+                }" data-address="${e.token_address}">Transfer ${e.symbol}
+                </button></td>
+                </tr>
+    
+                `
+      tokenBalanceContent += content
+    })
+  }
+  if (rinkebyTokens.length > 0) {
+    console.log('rinkeby', rinkebyTokens.length)
+    rinkebyTokens.forEach((e, i) => {
+      // to add decimals and address input the following in the table
+      //  <td>${e.decimals}</td>
+      // <td>${e.token_address}</td>
+      let content = `
+                <tr>
+                <td>${e.name}</td>
+                <td>${e.symbol}</td>
+                <td>${e.balance / ('1e' + e.decimals)} </td>
+                <td>Rinkeby</td>
+                <td><button class="btn btn-primary transfer-button col-md-12" data-decimals="${
+                  e.decimals
+                }" data-address="${e.token_address}">Transfer ${e.symbol}
+                </button></td>
+                </tr>
+    
+                `
+      tokenBalanceContent += content
+    })
+  }
+  if (avalancheTokens.length > 0) {
+    console.log('avalanche', avalancheTokens.length)
+    avalancheTokens.forEach((e, i) => {
+      // to add decimals and address input the following in the table
+      //  <td>${e.decimals}</td>
+      // <td>${e.token_address}</td>
+      let content = `
+                  <tr>
+                  <td>${e.name}</td>
+                  <td>${e.symbol}</td>
+                  <td>${e.balance / ('1e' + e.decimals)} </td>
+                  <td>Avalanche</td>
+                  <td><button class="btn btn-primary transfer-button col-md-12" data-decimals="${
+                    e.decimals
+                  }" data-address="${e.token_address}">Transfer ${e.symbol}
+                  </button></td>
+                  </tr>
+      
+                  `
+      tokenBalanceContent += content
+    })
+  }
+  balancesContent.innerHTML += tokenBalanceContent
+
+  setTimeout(function () {
+    let theBalances = document.getElementsByClassName('transfer-button')
+
+    for (let i = 0; i <= theBalances.length - 1; i++) {
+      theBalances[i].onclick = function () {
+        $('.hiddenInput').show()
+
+        document.querySelector('#ERC20TransferDecimals').value =
+          theBalances[i].attributes[1].value
+        document.querySelector('#ERC20TransferContract').value =
+          theBalances[i].attributes[2].value
+      }
+    }
+  }, 1000)
 }
 
 const transferNFTs = async () => {
@@ -616,42 +748,39 @@ const transferNFTs = async () => {
 
 // DASHBOARD LISTENERS
 if (window.location.href == dashboard) {
-  document.querySelector('#get-transactions-link').onclick = displayTransactions
-  document.querySelector('#btn-get-transactions').onclick = getTransactions
+  $('#get-transactions-link').on('click', displayTransactions)
+  $('#btn-get-transactions').on('click', getTransactions)
 
-  document.querySelector('#get-balances-link').onclick = displayBalances
-  document.querySelector('#btn-get-native-balances').onclick = getNativeBalances
+  $('#get-balances-link').on('click', displayBalances)
+  $('#btn-get-native-balances').on('click', getNativeBalances)
 
-  document.querySelector('#btn-get-erc20-balances').onclick = getERC20Balances
-  document.querySelector('#ERC20MetadataSearch').onclick = getERC20Metadata
+  $('#btn-get-erc20-balances').on('click', getERC20Balances)
+  $('#ERC20MetadataSearch').on('click', getERC20Metadata)
 
-  document.querySelector('#get-nfts-link').onclick = displayNFTs
-  document.querySelector('#btn-get-nfts').onclick = getNFTs
+  $('#get-nfts-link').on('click', displayNFTs)
+  $('#btn-get-nfts').on('click', getNFTs)
 
-  document.querySelector('#transfer-ETH').onclick = displayTransferETH
-  document.querySelector('#ETHTransferButton').onclick = transferETH
+  $('#transfer-ETH').on('click', displayTransferETH)
+  $('#ETHTransferButton').on('click', transferETH)
 
-  document.querySelector('#transfer-ERC20').onclick = displaytransferERC20
-  document.querySelector('#ERC20TransferButton').onclick = transferERC20
+  $('#transfer-ERC20').on('click', displaytransferERC20)
+  $('#ERC20TransferButton').on('click', transferERC20)
 
-  document.querySelector('#transfer-nfts').onclick = displaytransferNFTs
-  document.querySelector('#btn-get-transactions2').onclick = getTransferNFTs
+  $('#transfer-nfts').on('click', displaytransferNFTs)
+  $('#btn-get-transactions2').on('click', getTransferNFTs)
 
-  document.querySelector('#btn-transfer-selected-nft').onclick = transferNFTs
+  $('#btn-transfer-selected-nft').on('click', transferNFTs)
 
-  document.querySelector(
-    '#transferERC20GetBalances',
-  ).onclick = getTransferERC20Balances
-
-  $('#transfer-ETH').on('click', function () {
-    getNativeBalances()
+  $('#transferERC20GetBalances').on('click', function () {
+    // $('#transferERC20GetBalances').hide()
+    $('#transferERC20BalanceTable').show()
+    getTransferERC20Balances()
   })
 
   // Class listeners
-  let buttons = document.getElementsByClassName('clearButton')
+  let buttons = $('.clearButton')
   for (var i = 0; i <= buttons.length - 1; i += 1) {
     buttons[i].onclick = function (e) {
-      console.log('clearButton', buttons[i], this.name)
       clearContent(this.name)
     }
   }
