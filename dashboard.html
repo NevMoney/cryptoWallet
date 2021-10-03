@@ -24,6 +24,13 @@
       src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
     ></script>
 
+    <!-- fontAwesome-->
+    <script
+      defer
+      src="https://kit.fontawesome.com/4da3f1c584.js"
+      crossorigin="anonymous"
+    ></script>
+
     <!-- STYLING -->
     <link href="css/dashboard.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet" />
@@ -46,23 +53,14 @@
       >
         Wallet Dashboard
       </a>
-      <button
-        class="navbar-toggler position-absolute d-md-none collapsed"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#sidebarMenu"
-        aria-controls="sidebarMenu"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
+
       <input
         class="form-control form-control-dark w-100"
         type="text"
         placeholder="Search"
         aria-label="Search"
       />
+
       <div class="navbar-nav">
         <div class="nav-item text-nowrap">
           <a id="btn-logout" class="nav-link px-3" onclick="logout()">
@@ -133,10 +131,7 @@
           <hr />
 
           <!-- For Developers -->
-
           <div class="position-sticky pt-3">
-            <!-- METADATA FOR ERC20 STARTS HERE
-                  ========================================================= -->
             <h3 class="text-center">Contract Tools</h3>
             <ul class="nav flex-column">
               <li class="nav-item">
@@ -147,13 +142,16 @@
               </li>
             </ul>
           </div>
+          <hr />
+
           <!-- Exchange -->
 
           <!-- Token Purchase -->
 
           <!-- Hide Sidebar Button -->
           <button
-            class="d-md-none btn btn-primary d-block mx-auto"
+            class="btn btn-secondary d-block mx-auto"
+            id="sidebarMenuMinMaxButton"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#sidebarMenu"
@@ -161,9 +159,12 @@
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span class="navbar-toggler-icon">Hello</span>
+            <span class="navbar-toggler-icon" data-feather="minimize-2"></span>
           </button>
         </nav>
+        <!-- IMPORTED SIDE BAR STARTS HERE -->
+
+        <!-- IMPORTED SIDE BAR ENDS HERE -->
 
         <!-- MAIN DISPLAY -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">

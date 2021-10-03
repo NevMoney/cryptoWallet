@@ -931,3 +931,14 @@ if (window.location.href == dashboard) {
 if (window.location.href == homepage) {
   document.querySelector('#btn-login').onclick = login
 }
+
+// function to show/hide the sidebar with #sidebarMenuMinMaxButton button
+$('#sidebarMenuMinMaxButton').on('click', function () {
+  if ($('#sidebar').hasClass('active')) {
+    $('#sidebar').removeClass('active')
+    // $('#sidebarMenuMinMaxButton').removeClass('active')
+  } else {
+    $('#sidebar').addClass('active')
+    // $('#sidebarMenuMinMaxButton').addClass('active')
+  }
+})
