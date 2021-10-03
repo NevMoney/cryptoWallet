@@ -72,7 +72,7 @@
       </div>
     </header>
 
-    <!-- MAIN DISPLAY -->
+    <!-- PAGE DISPLAY -->
     <div class="container-fluid">
       <div class="row">
         <!-- SIDEBAR -->
@@ -80,6 +80,7 @@
           id="sidebarMenu"
           class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse"
         >
+          <!-- Accounting -->
           <div class="position-sticky pt-3">
             <h3 class="text-center">Accounting</h3>
             <ul class="nav flex-column">
@@ -104,6 +105,8 @@
             </ul>
           </div>
           <hr />
+
+          <!-- Transfers -->
           <h3 class="text-center">Transfer Tokens</h3>
           <div class="position-sticky pt-3">
             <ul class="nav flex-column">
@@ -127,6 +130,39 @@
               </li>
             </ul>
           </div>
+          <hr />
+
+          <!-- For Developers -->
+
+          <div class="position-sticky pt-3">
+            <!-- METADATA FOR ERC20 STARTS HERE
+                  ========================================================= -->
+            <h3 class="text-center">Contract Tools</h3>
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a id="show-ERC20-metadata" class="nav-link">
+                  <span data-feather="code"></span>
+                  ERC20 Metadata
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!-- Exchange -->
+
+          <!-- Token Purchase -->
+
+          <!-- Hide Sidebar Button -->
+          <button
+            class="d-md-none btn btn-primary d-block mx-auto"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#sidebarMenu"
+            aria-controls="sidebarMenu"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon">Hello</span>
+          </button>
         </nav>
 
         <!-- MAIN DISPLAY -->
@@ -421,63 +457,6 @@
                     role="status"
                     style="display: none;"
                   ></div>
-                  <!-- METADATA FOR ERC20 STARTS HERE
-                  =========================================================
-                  <a
-                    class="btn btn-secondary col-12"
-                    data-bs-toggle="collapse"
-                    href="#multiCollapseExample1"
-                    role="button"
-                    aria-expanded="false"
-                    aria-controls="multiCollapseExample1"
-                  >
-                    Unsure of contract address or decimals? Click me
-                  </a>
-                  <div class="row">
-                    <div class="col-md-12 mt-3">
-                      <div
-                        class="collapse multi-collapse"
-                        id="multiCollapseExample1"
-                      >
-                        <div>
-                          <p>
-                            Choose the chain you need (eg rinkeby, ropsten,
-                            matic) and choose the symbol (eg LINK, be warned
-                            that this is case sensitive).
-                          </p>
-                          <p>
-                            We will scan the tokens you have on that chain and
-                            retrieve the metadata and put it into the search for
-                            you.
-                          </p>
-                          <div class="form-group col-md-12">
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="ERC20MetadataChain"
-                              placeholder="Token chain?"
-                            />
-                          </div>
-                          <div class="form-group col-md-12">
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="ERC20MetadataSymbol"
-                              placeholder="Token symbol?"
-                            />
-                          </div>
-                        </div>
-                        <button
-                          id="ERC20MetadataSearch"
-                          type="submit"
-                          class="btn btn-secondary"
-                        >
-                          Find Metadata
-                        </button>
-                        <div id="ERC20Metadata"></div>
-                      </div>
-                    </div>
-                  </div>-->
                 </div>
               </div>
               <hr />
@@ -568,6 +547,145 @@
 
             <div id="tableOfNFTs2">
               <div id="NFTtable2" class="d-flex flex-wrap"></div>
+            </div>
+          </div>
+
+          <!-- ERC20 MetaData -->
+          <div id="section3">
+            <div id="ERC20" class="col-md-12">
+              <h2>ERC20 Info</h2>
+              <div>
+                <p class="m-3 text-center h6">
+                  Now you can easily get the ERC20 token information for any
+                  token on a different network.
+                </p>
+              </div>
+
+              <div class="d-flex">
+                <!-- ADDRESS search -->
+                <div class="container mt-3 col-md-6">
+                  <a
+                    class="btn btn-secondary col-12"
+                    data-bs-toggle="collapse"
+                    href="#multiCollapseExample2"
+                    role="button"
+                    aria-expanded="false"
+                    aria-controls="multiCollapseExample2"
+                  >
+                    Search By Address
+                  </a>
+                  <div class="row">
+                    <div class="col-md-12 mt-3">
+                      <div
+                        class="collapse multi-collapse"
+                        id="multiCollapseExample2"
+                      >
+                        <div>
+                          <p>
+                            Choose the chain from the dropdown menu and then
+                            enter the address of the token for which you need
+                            data.
+                          </p>
+                          <div class="form-group col-md-12">
+                            <select
+                              id="ERC20MetadataChainByAddress"
+                              class="form-select"
+                            >
+                              <option value="none" selected>
+                                Select a chain?
+                              </option>
+                              <option value="eth">Ethereum Mainnet</option>
+                              <option value="bsc">Binance Mainnet</option>
+                              <option value="matic">Polygon Mainnet</option>
+                              <option value="avalanche">
+                                Avalanche Mainnet
+                              </option>
+                              <option value="rinkeby">Rinkeby</option>
+                            </select>
+                          </div>
+                          <div class="form-group col-md-12">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="ERC20MetadataAddress"
+                              placeholder="Enter contract address"
+                            />
+                          </div>
+                        </div>
+                        <button
+                          id="ERC20MetadataSearchByAddress"
+                          type="submit"
+                          class="btn btn-secondary"
+                        >
+                          Find Metadata
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- SYMBOL search -->
+                <div class="container mt-3 col-md-6">
+                  <a
+                    class="btn btn-secondary col-12"
+                    data-bs-toggle="collapse"
+                    href="#multiCollapseExample1"
+                    role="button"
+                    aria-expanded="false"
+                    aria-controls="multiCollapseExample1"
+                  >
+                    Search By Symbol
+                  </a>
+                  <div class="row">
+                    <div class="col-md-12 mt-3">
+                      <div
+                        class="collapse multi-collapse"
+                        id="multiCollapseExample1"
+                      >
+                        <div>
+                          <p>
+                            Choose the chain from the dropdown menu and then
+                            enter the symbol for which you need data (please
+                            ensure to use all CAPS for the symbol).
+                          </p>
+                          <div class="form-group col-md-12">
+                            <select id="ERC20MetadataChain" class="form-select">
+                              <option value="none" selected>
+                                Select a chain?
+                              </option>
+                              <option value="eth">Ethereum Mainnet</option>
+                              <option value="bsc">Binance Mainnet</option>
+                              <option value="matic">Polygon Mainnet</option>
+                              <option value="avalanche">
+                                Avalanche Mainnet
+                              </option>
+                              <option value="rinkeby">Rinkeby</option>
+                            </select>
+                          </div>
+                          <div class="form-group col-md-12">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="ERC20MetadataSymbol"
+                              placeholder="ETH or LINK or YFI..."
+                            />
+                          </div>
+                        </div>
+                        <button
+                          id="ERC20MetadataSearch"
+                          type="submit"
+                          class="btn btn-secondary"
+                        >
+                          Find Metadata
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <hr />
+              <div id="ERC20Output" class="container col-md-12"></div>
             </div>
           </div>
         </main>

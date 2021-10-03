@@ -450,13 +450,141 @@ const getTransferNFTs = async () => {
 const getERC20Metadata = async () => {
   let _symbol = document.querySelector('#ERC20MetadataSymbol').value
   let _chain = document.querySelector('#ERC20MetadataChain').value
-  let tokens = await Moralis.Web3API.account.getTokenBalances({ chain: _chain })
+  if (_symbol == '' || _chain == '') {
+    return alert('Please enter a symbol and chain')
+  }
+  const options = { chain: _chain, symbols: _symbol }
+  let tokens = await Moralis.Web3API.token.getTokenMetadataBySymbol(options)
+  $('#ERC20Output').empty()
   tokens.forEach((e, i) => {
     if (e.symbol == _symbol) {
-      document.querySelector('#ERC20TransferContract').value = e.token_address
-      document.querySelector('#ERC20TransferDecimals').value = e.decimals
+      let address = e.address
+      let symbol = e.symbol
+      let name = e.name
+      let decimals = e.decimals
+      let logo = e.logo
+      let thumbnail = e.thumbnail
+      let validated = e.validated
+      let logoHash = e.logo_hash
+      if (logoHash) {
+        if (validated == null) {
+          $('#ERC20Output').append(
+            `<div class="card col-md-6 metadataCard">
+              <img src="${thumbnail}" class="card-img-top" alt="token thumbnail">
+              <h5 class="card-title">Token Name: ${name}</h5>
+              <div class="card-body">
+                <p class="card-text">Symbol: ${symbol}</p>
+                <p class="card-text">Decimals: ${decimals}</p>
+                <p class="card-text">Contract Address: ${address}</p>
+              </div>
+            </div>`,
+          )
+        } else {
+          $('#ERC20Output').append(
+            `<div class="card col-md-6 metadataCard">
+              <img src="${thumbnail}" class="card-img-top" alt="token thumbnail">
+              <h5 class="card-title">Token Name: ${name}</h5>
+              <div class="card-body">              
+                <p class="card-text">Symbol: ${symbol}</p>
+                <p class="card-text">Decimals: ${decimals}</p>
+                <p class="card-text">Contract Address: ${address}</p>
+                <p class="card-text">${validated}</p>
+              </div>
+            </div>`,
+          )
+        }
+      } else {
+        $('#ERC20Output').append(
+          `<div class="card col-md-6 metadataCard">
+            <h1 style="color: red">WARNING NOT VERIFIED</h1>
+            <h5 class="card-title">Token Name: ${name}</h5>
+            <div class="card-body">              
+              <p class="card-text">Symbol: ${symbol}</p>
+              <p class="card-text">Decimals: ${decimals}</p>
+              <p class="card-text">Contract Address: ${address}</p>
+              <p class="card-text">Verify token on chain scanner (etherscan, etc.) before using.</p>
+            </div>
+          </div>`,
+        )
+      }
     }
   })
+  if (tokens.length == 0) {
+    $('#ERC20Output').append(
+      `We can't seem to find token with symbol: ${_symbol}`,
+    )
+  }
+}
+
+const getERC20MetadataByAddress = async () => {
+  let address = $('#ERC20MetadataAddress').val()
+  let chain = $('#ERC20MetadataChainByAddress').val()
+  if (address == '' || chain == '') {
+    return alert('Please enter an address and chain')
+  }
+  const options = { chain: chain, addresses: address }
+  let tokens = await Moralis.Web3API.token.getTokenMetadata(options)
+  $('#ERC20Output').empty()
+  console.log(tokens)
+  tokens.forEach((e, i) => {
+    if (e.address == address) {
+      let address = e.address
+      let symbol = e.symbol
+      let name = e.name
+      let decimals = e.decimals
+      let logo = e.logo
+      let thumbnail = e.thumbnail
+      let validated = e.validated
+      let logoHash = e.logo_hash
+      // check to see if there is a logoHash
+      if (logoHash) {
+        if (validated == null) {
+          $('#ERC20Output').append(
+            `<div class="card col-md-6 metadataCard">
+              <img src="${thumbnail}" class="card-img-top" alt="token thumbnail">
+              <h5 class="card-title">Token Name: ${name}</h5>
+              <div class="card-body">
+                <p class="card-text">Symbol: ${symbol}</p>
+                <p class="card-text">Decimals: ${decimals}</p>
+                <p class="card-text">Contract Address: ${address}</p>
+              </div>
+            </div>`,
+          )
+        } else {
+          $('#ERC20Output').append(
+            `<div class="card col-md-6 metadataCard">
+              <img src="${thumbnail}" class="card-img-top" alt="token thumbnail">
+              <h5 class="card-title">Token Name: ${name}</h5>
+              <div class="card-body">              
+                <p class="card-text">Symbol: ${symbol}</p>
+                <p class="card-text">Decimals: ${decimals}</p>
+                <p class="card-text">Contract Address: ${address}</p>
+                <p class="card-text">${validated}</p>
+              </div>
+            </div>`,
+          )
+        }
+      } else {
+        $('#ERC20Output').append(
+          `<div class="card col-md-6 metadataCard">
+            <h1 style="color: red">WARNING NOT VERIFIED</h1>
+            <h5 class="card-title">Token Name: ${name}</h5>
+            <div class="card-body">              
+              <p class="card-text">Symbol: ${symbol}</p>
+              <p class="card-text">Decimals: ${decimals}</p>
+              <p class="card-text">Contract Address: ${address}</p>
+              <p class="card-text">Verify token on chain scanner (etherscan, etc.) before using.</p>
+            </div>
+          </div>`,
+        )
+      }
+    }
+  })
+  if (tokens.length == 0) {
+    $('#ERC20Output').append(
+      `We can't seem to find token with address: ${address}`,
+    )
+  }
 }
 
 // DISPLAY FUNCTIONS
@@ -772,10 +900,11 @@ if (window.location.href == dashboard) {
   $('#btn-transfer-selected-nft').on('click', transferNFTs)
 
   $('#transferERC20GetBalances').on('click', function () {
-    // $('#transferERC20GetBalances').hide()
     $('#transferERC20BalanceTable').show()
     getTransferERC20Balances()
   })
+
+  $('#ERC20MetadataSearchByAddress').on('click', getERC20MetadataByAddress)
 
   // Class listeners
   let buttons = $('.clearButton')
