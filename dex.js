@@ -34,12 +34,12 @@ async function listAvailableTokens() {
   } else if (chain === '0x539') {
     chain = 'localdevchain'
   }
-  console.log(chain)
+
   const result = await Moralis.Plugins.oneInch.getSupportedTokens({
     chain: chain, // The blockchain you want to use (eth/bsc/polygon)
   })
   tokens = result.result.tokens
-  console.log(tokens)
+
   let parent = document.getElementById('token_list')
   for (const address in tokens) {
     let token = tokens[address]
@@ -58,11 +58,33 @@ async function listAvailableTokens() {
   }
 }
 
+// automatically search for token symbol as the user inputs to #tokenSearch and trigger on keyup
+function searchToken() {
+  let search = document.getElementById('tokenSearch').value
+  let parent = document.getElementById('token_list')
+  let children = parent.children
+  for (let i = 0; i < children.length; i++) {
+    let child = children[i]
+    let text = child.innerText
+    if (text.toLowerCase().includes(search.toLowerCase())) {
+      child.style.display = 'block'
+    } else {
+      child.style.display = 'none'
+    }
+  }
+}
+
+// on key up in #tokenSearch update the search results
+document.getElementById('tokenSearch').onkeyup = () => {
+  searchToken()
+}
+
 function selectToken(address) {
   closeModal()
-  console.log(tokens)
+  console.log('tokens', tokens)
   currentTrade[currentSelectSide] = tokens[address]
-  console.log(currentTrade)
+  console.log('currentTrade', currentTrade)
+  document.getElementById('tokenSearch').value = ''
   renderInterface()
   getQuote()
 }
@@ -107,7 +129,7 @@ async function getQuote() {
     toTokenAddress: currentTrade.to.address, // The token you want to receive
     amount: amount,
   })
-  console.log(quote)
+  console.log('quote', quote)
   document.getElementById('gas_estimate').innerHTML = quote.estimatedGas
   document.getElementById('to_amount').value =
     quote.toTokenAmount / 10 ** quote.toToken.decimals
