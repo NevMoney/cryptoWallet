@@ -955,24 +955,34 @@ const transferNFTs = async () => {
   const contract_address = $('#nft-transfer-contract-address').val()
   const amount = $('#nft-transfer-amount').val()
   const token_id = $('#nft-transfer-token-id').val()
-  if (type === 'erc721') {
-    const options = {
-      type: type,
-      receiver: recipient,
-      contractAddress: contract_address,
-      tokenId: token_id,
-    }
-  } else {
-    // sending 15 tokens with token id = 1
-    const options = {
-      type: type,
-      receiver: recipient,
-      contractAddress: contract_address,
-      tokenId: token_id,
-      amount: amount,
-    }
+
+  const options = {
+    type: type,
+    receiver: recipient,
+    contract_address: contract_address,
+    token_id: token_id,
+    amount: amount,
   }
-  let result = await Moralis.transfer(options)
+  console.log(options)
+  try {
+    $('.spinner-border').show()
+    let result = await Moralis.transfer(options)
+    console.log('result', result)
+    $('#tableOfNFTs2').empty()
+    $('#tableOfNFTs2').append(
+      `<p>Your token has successfully transferred to ${recipient}. Here is your transaction information:</p>
+      <ul>
+        <li>Transaction Hash: ${result.transactionHash}</li>
+        <li>Block Number: ${result.blockNumber}</li>
+        <li>Block Hash: ${result.blockHash}</li>
+        <li>Gas Used: ${result.gasUsed}</li>
+      </ul>
+    `,
+    )
+    $('.spinner-border').hide()
+  } catch (error) {
+    console.error(error.message)
+  }
 }
 
 // DASHBOARD LISTENERS
@@ -1033,7 +1043,7 @@ $('#sidebarMenuMinMaxButton').on('click', function () {
   // if sidebar is collapsed
   if (document.getElementById('sidebarMenu').style.width == '50px') {
     $('#sidebarMenu').addClass('collapsed')
-    document.getElementById('sidebarMenu').style.width = '230px'
+    document.getElementById('sidebarMenu').style.width = '200px'
     $('#sidebarMenuMinMaxButton').html(
       '<i class="fas fa-angle-double-left"></i>',
     )
