@@ -10,10 +10,33 @@ async function init() {
 init()
 
 async function listAvailableTokens() {
-  let chainId = window.ethereum['chainId']
-
+  let chain = window.ethereum['chainId']
+  if (chain === '0x1') {
+    chain = 'eth'
+  } else if (chain === '0x2a') {
+    chain = 'kovan'
+  } else if (chain === '0x3') {
+    chain = 'ropsten'
+  } else if (chain === '0x4') {
+    chain = 'rinkeby'
+  } else if (chain === '0x5') {
+    chain = 'goerli'
+  } else if (chain === '0x89') {
+    chain = 'matic'
+  } else if (chain === '0x13881') {
+    chain = 'mumbai'
+  } else if (chain === '0x38') {
+    chain = 'bsc'
+  } else if (chain === '0xa86a') {
+    chain = 'avalanche'
+  } else if (chain === '0,61') {
+    chain = 'bsc testnet'
+  } else if (chain === '0x539') {
+    chain = 'localdevchain'
+  }
+  console.log(chain)
   const result = await Moralis.Plugins.oneInch.getSupportedTokens({
-    chain: chainId, // The blockchain you want to use (eth/bsc/polygon)
+    chain: chain, // The blockchain you want to use (eth/bsc/polygon)
   })
   tokens = result.result.tokens
   console.log(tokens)
