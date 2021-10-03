@@ -120,7 +120,12 @@ h2 {
 }
 
 #sidebarMenuMinMaxButton {
+  padding: 10px 15px;
   position: absolute;
   bottom: 0;
   right: 0;
+}
+
+#sidebarMenuMinMaxButton:hover {
+  background-color: rgb(211, 211, 211);
 }

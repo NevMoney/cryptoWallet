@@ -932,13 +932,65 @@ if (window.location.href == homepage) {
   document.querySelector('#btn-login').onclick = login
 }
 
-// function to show/hide the sidebar with #sidebarMenuMinMaxButton button
+// open/close sidebar
 $('#sidebarMenuMinMaxButton').on('click', function () {
-  if ($('#sidebar').hasClass('active')) {
-    $('#sidebar').removeClass('active')
-    // $('#sidebarMenuMinMaxButton').removeClass('active')
-  } else {
-    $('#sidebar').addClass('active')
-    // $('#sidebarMenuMinMaxButton').addClass('active')
+  // if sidebar is collapsed
+  if (document.getElementById('sidebarMenu').style.width == '50px') {
+    $('#sidebarMenu').addClass('collapsed')
+    document.getElementById('sidebarMenu').style.width = '230px'
+    $('#sidebarMenuMinMaxButton').html(
+      '<i class="fas fa-angle-double-left"></i>',
+    )
+    // show all h5 elements
+    $('#sidebarMenu h5').show()
+
+    // turn all icons within links back to the default
+    $('#get-transactions-link').html(
+      '<i class="fas fa-cash-register"></i> Transactions',
+    )
+    $('#get-balances-link').html('<i class="fas fa-wallet"></i> Token Balances')
+    $('#get-nfts-link').html('<i class="fas fa-id-card"></i> NFT Holdings')
+    $('#transfer-ETH').html('<i class="fas fa-exchange-alt"></i> Transfer ETH')
+    $('#transfer-ERC20').html('<i class="fas fa-sync"></i> Transfer Tokens')
+    $('#transfer-nfts').html(
+      '<i class="fas fa-hand-holding-usd"></i> Transfer NFT',
+    )
+    $('#show-ERC20-metadata').html('<i class="fas fa-code"></i> Token Metadata')
+
+    // $('#get-transactions-link') should be a link with cursor pointer
+    $('#get-transactions-link').css('cursor', 'pointer')
+    $('#get-transactions-link').css('font-weight', '500')
+    $('#get-transactions-link').on('click', displayTransactions)
+  }
+  // if the bar is expanded
+  else {
+    $('#sidebarMenu').removeClass('collapsed')
+    document.getElementById('sidebarMenu').style.width = '50px'
+    $('#sidebarMenuMinMaxButton').html(
+      '<i class="fas fa-angle-double-right"></i>',
+    )
+    // hide all h5 elements from the sidebar
+    $('#sidebarMenu h5').hide()
+
+    // turn all wording inside the links to icons
+    $('#get-transactions-link').html('<i class="fas fa-cash-register"></i>')
+    $('#get-balances-link').html('<i class="fas fa-wallet"></i>')
+    $('#get-nfts-link').html('<i class="fas fa-id-card"></i>')
+    $('#transfer-ETH').html('<i class="fas fa-exchange-alt"></i>')
+    $('#transfer-ERC20').html('<i class="fas fa-sync"></i>')
+    $('#transfer-nfts').html('<i class="fas fa-hand-holding-usd"></i>')
+    $('#show-ERC20-metadata').html('<i class="fas fa-code"></i>')
+
+    // adjust padding for $('#get-transactions-link')
+    $('#get-transactions-link').css('padding-left', '16px')
+
+    // all links still have same click attributes
+    $('#get-transactions-link').on('click', displayTransactions)
+    $('#get-balances-link').on('click', displayBalances)
+    $('#get-nfts-link').on('click', displayNFTs)
+    $('#transfer-ETH').on('click', displayTransferETH)
+    $('#transfer-ERC20').on('click', displaytransferERC20)
+    $('#transfer-nfts').on('click', displaytransferNFTs)
+    $('#show-ERC20-metadata').on('click', displayERC20Metadata)
   }
 })

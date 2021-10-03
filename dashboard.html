@@ -79,25 +79,25 @@
           class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse"
         >
           <!-- Accounting -->
+          <h5 class="text-center">Accounting</h5>
           <div class="position-sticky pt-3">
-            <h3 class="text-center">Accounting</h3>
             <ul class="nav flex-column">
               <li id="get-transactions-link" class="nav-item">
                 <a class="nav-link">
-                  <span data-feather="file"></span>
+                  <i class="fas fa-cash-register"></i>
                   Transactions
                 </a>
               </li>
               <li class="nav-item">
                 <a id="get-balances-link" class="nav-link">
-                  <span data-feather="shopping-cart"></span>
+                  <i class="fas fa-wallet"></i>
                   Token Balances
                 </a>
               </li>
               <li class="nav-item">
                 <a id="get-nfts-link" class="nav-link">
-                  <span data-feather="users"></span>
-                  NFTs
+                  <i class="fas fa-id-card"></i>
+                  NFT Holdings
                 </a>
               </li>
             </ul>
@@ -105,25 +105,25 @@
           <hr />
 
           <!-- Transfers -->
-          <h3 class="text-center">Transfer Tokens</h3>
+          <h5 class="text-center">Transfer Tokens</h5>
           <div class="position-sticky pt-3">
             <ul class="nav flex-column">
               <li class="nav-item">
                 <a id="transfer-ETH" class="nav-link">
-                  <span data-feather="file"></span>
+                  <i class="fas fa-exchange-alt"></i>
                   Transfer ETH
                 </a>
               </li>
               <li class="nav-item">
                 <a id="transfer-ERC20" class="nav-link">
-                  <span data-feather="shopping-cart"></span>
-                  Transfer ERC20
+                  <i class="fas fa-sync"></i>
+                  Transfer Tokens
                 </a>
               </li>
               <li class="nav-item">
                 <a id="transfer-nfts" class="nav-link">
-                  <span data-feather="users"></span>
-                  Transfer NFTs
+                  <i class="fas fa-hand-holding-usd"></i>
+                  Transfer NFT
                 </a>
               </li>
             </ul>
@@ -131,13 +131,13 @@
           <hr />
 
           <!-- For Developers -->
+          <h5 class="text-center">Contract Tools</h5>
           <div class="position-sticky pt-3">
-            <h3 class="text-center">Contract Tools</h3>
             <ul class="nav flex-column">
               <li class="nav-item">
                 <a id="show-ERC20-metadata" class="nav-link">
-                  <span data-feather="code"></span>
-                  ERC20 Metadata
+                  <i class="fas fa-code"></i>
+                  Token Metadata
                 </a>
               </li>
             </ul>
@@ -149,22 +149,11 @@
           <!-- Token Purchase -->
 
           <!-- Hide Sidebar Button -->
-          <button
-            class="btn btn-secondary d-block mx-auto"
-            id="sidebarMenuMinMaxButton"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#sidebarMenu"
-            aria-controls="sidebarMenu"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon" data-feather="minimize-2"></span>
+          <!-- button with id=sidebarMenuMinMaxButton which will toggle between hiding and showing of the #sidebarMenu -->
+          <button id="sidebarMenuMinMaxButton" class="btn btn-link btn-sm">
+            <i class="fas fa-angle-double-left"></i>
           </button>
         </nav>
-        <!-- IMPORTED SIDE BAR STARTS HERE -->
-
-        <!-- IMPORTED SIDE BAR ENDS HERE -->
 
         <!-- MAIN DISPLAY -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
