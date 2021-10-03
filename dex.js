@@ -4,17 +4,19 @@ let tokens
 
 async function init() {
   await Moralis.initPlugins()
-  await Moralis.enable()
   await listAvailableTokens()
 }
 
 init()
 
 async function listAvailableTokens() {
+  let chainId = window.ethereum['chainId']
+
   const result = await Moralis.Plugins.oneInch.getSupportedTokens({
-    chain: 'eth', // The blockchain you want to use (eth/bsc/polygon)
+    chain: chainId, // The blockchain you want to use (eth/bsc/polygon)
   })
-  tokens = result.tokens
+  tokens = result.result.tokens
+  console.log(tokens)
   let parent = document.getElementById('token_list')
   for (const address in tokens) {
     let token = tokens[address]
