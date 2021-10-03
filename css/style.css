@@ -17,7 +17,8 @@
 #transferNFTs,
 #transactionsSection,
 #balancesSection,
-#nftSection {
+#nftSection,
+#ERC20MetadataContent {
   display: none;
 }
 

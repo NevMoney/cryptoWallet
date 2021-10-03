@@ -86,6 +86,7 @@ const renderContent = (element) => {
     '#balancesSection',
     '#nftSection',
     '#starter',
+    '#ERC20MetadataContent',
   ]
   elements.forEach((e) => {
     hideContent(e)
@@ -636,6 +637,10 @@ const displaytransferNFTs = () => {
   renderContent('#transferNFTs')
 }
 
+const displayERC20Metadata = () => {
+  renderContent('#ERC20MetadataContent')
+}
+
 // TRANSFER FUNCTIONS
 const transferETH = async () => {
   let _amount = String(document.querySelector('#amountOfETH').value)
@@ -905,6 +910,8 @@ if (window.location.href == dashboard) {
   })
 
   $('#ERC20MetadataSearchByAddress').on('click', getERC20MetadataByAddress)
+
+  $('#show-ERC20-metadata').on('click', displayERC20Metadata)
 
   // Class listeners
   let buttons = $('.clearButton')
