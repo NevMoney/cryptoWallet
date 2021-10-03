@@ -149,7 +149,6 @@
           <!-- Token Purchase -->
 
           <!-- Hide Sidebar Button -->
-          <!-- button with id=sidebarMenuMinMaxButton which will toggle between hiding and showing of the #sidebarMenu -->
           <button id="sidebarMenuMinMaxButton" class="btn btn-link btn-sm">
             <i class="fas fa-angle-double-left"></i>
           </button>
@@ -477,63 +476,99 @@
           <!-- NFT transfer -->
           <div id="transferNFTs">
             <h2>Transfer NFTs</h2>
-            <div class="form-group col-md-6">
-              <input
-                type="text"
-                class="form-control"
-                id="nft-transfer-receiver"
-                placeholder="Sending to?"
-              />
-            </div>
-            <div class="form-group col-md-6">
-              <input
-                type="text"
-                class="form-control"
-                id="nft-transfer-amount"
-                placeholder="Amount to send?"
-              />
-            </div>
-            <div class="form-group col-md-6">
-              <select
-                class="form-select"
-                aria-label="Default select example"
-                id="nft-transfer-type"
+            <p class="text-center" style="font-size: medium;">
+              Easily transfer your NFT holdings to anyone, anywhere, anytime.
+            </p>
+            <p class="text-center text-muted" style="font-size: small;">
+              While you can mannually input the required information, you can
+              also user the "Get NFTs" button to automatically get the NFTs you
+              own.
+              <br />
+              Once renderred, simply click on the one you wish to transfer and
+              the necessary information will be filled in for you.
+            </p>
+
+            <!-- INPUT for Transfer -->
+            <div class="container">
+              <div class="form-group col-md-6">
+                <select
+                  class="form-select"
+                  aria-label="Default select example"
+                  id="nft-transfer-type"
+                >
+                  <option selected>Choose the type</option>
+                  <option value="erc1155">ERC1155</option>
+                  <option value="erc721">ERC721</option>
+                </select>
+              </div>
+
+              <div class="form-group col-md-6">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nft-transfer-contract-address"
+                  placeholder="Contract Address"
+                />
+              </div>
+
+              <div class="form-group col-md-6">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nft-transfer-token-id"
+                  placeholder="Token id"
+                />
+              </div>
+
+              <div class="form-group col-md-6">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nft-transfer-amount"
+                  placeholder="Amount to send?"
+                />
+              </div>
+
+              <div class="form-group col-md-6">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nft-transfer-receiver"
+                  placeholder="Sending to?"
+                />
+              </div>
+
+              <button
+                class="btn btn-primary col-md-6"
+                id="btn-transfer-selected-nft"
               >
-                <option selected>Choose the type</option>
-                <option value="erc1155">ERC1155</option>
-                <option value="erc721">ERC721</option>
+                Transfer NFT
+              </button>
+            </div>
+            <hr />
+
+            <div
+              class="col-md-6 offset-md-3 my-3 d-flex justify-content-center"
+            >
+              <select id="nft-chain2" class="form-select">
+                <option value="empty" selected>Which chain?</option>
+                <option value="eth">Ethereum Mainnet</option>
+                <option value="ropsten">Ropsten</option>
+                <option value="rinkeby">Rinkeby</option>
+                <option value="avalanche">Avalanche</option>
+                <option value="bsc">Binance Smart Chain (main)</option>
+                <option value="bsc testnet">Binance Smart Chain (test)</option>
+                <option value="matic">Polygon (Matic) Mainnet</option>
+                <option value="mumbai">Mumbai (Matic) Testnet</option>
               </select>
             </div>
-            <div class="form-group col-md-6">
-              <input
-                type="text"
-                class="form-control"
-                id="nft-transfer-contract-address"
-                placeholder="Contract Address"
-              />
-            </div>
-            <div class="form-group col-md-6">
-              <input
-                type="text"
-                class="form-control"
-                id="nft-transfer-token-id"
-                placeholder="Token id"
-              />
-            </div>
-            <button
-              class="btn btn-primary col-md-6"
-              id="btn-transfer-selected-nft"
-            >
-              Transfer NFT
-            </button>
-            <hr />
+
             <button
               class="btn btn-secondary col-md-4"
               id="btn-get-transactions2"
             >
               Get NFTs
             </button>
-            <!-- <button class="btn btn-primary col-md-4 clearButton" name="tableOfNFTs2">Clear NFTs</button> -->
 
             <div id="tableOfNFTs2">
               <div id="NFTtable2" class="d-flex flex-wrap"></div>

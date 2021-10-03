@@ -2,8 +2,11 @@
 Moralis.initialize('y7bQ8aZvO2XR51Scwuafav2tJ13V0qDQpqw90TXd')
 Moralis.serverURL = 'https://zrsca4lyqk9t.moralishost.com:2053/server'
 
-let homepage = 'http://127.0.0.1:5500/index.html'
-let dashboard = 'http://127.0.0.1:5500/dashboard.html'
+Moralis.Web3.getSigningData = () => 'Welcome to Tsaishen Crypto Wallet.'
+
+let domain = 'http://127.0.0.1:5500/'
+let homepage = `${domain}index.html`
+let dashboard = `${domain}dashboard.html`
 
 // REDIRECT USER BASED ON STATUS
 const currentUser = Moralis.User.current()
@@ -15,6 +18,21 @@ if (currentUser) {
     `<h1>Welcome ${currentUser.get('username')}</h1>`,
   )
 }
+
+// redirect based on whether they are logged in
+;(function () {
+  // if they are NOT authenticated and NOT on the homepage
+  if (Moralis.User.current() == null && window.location.pathname != homepage) {
+    document.querySelector('body').style.display = 'none'
+    window.location.href = homepage
+  }
+  if (
+    (Moralis.User.current() != null && window.location.pathname == homepage) ||
+    window.location.pathname == '/'
+  ) {
+    window.location.href = dashboard
+  }
+})()
 
 //HELPER FUNCTIONS
 const login = async () => {
@@ -445,7 +463,63 @@ const getNFTs = async () => {
 }
 
 const getTransferNFTs = async () => {
-  alert('This feature is coming soon')
+  let chain = $('#nft-chain2').val()
+  if (chain == 'empty') {
+    return alert('Choose a chain from the dropdown list')
+  } else {
+    await Moralis.Web3API.account
+      .getNFTs({ chain: chain })
+      .then((nfts) => displayNftToTransfer(nfts))
+  }
+}
+
+const displayNftToTransfer = async (nfts) => {
+  let tableOfNFTs = document.querySelector('#NFTtable2')
+
+  if (nfts.result.length == 0) {
+    tableOfNFTs.innerHTML += `<p class="h5 m-3 text-center">You have no NFTs on the chain you selected.</p>`
+  }
+
+  if (nfts.result.length > 0) {
+    tableOfNFTs.innerHTML =
+      "<div class='col-md-12'><p class='m-3 text-center'>👇 Click on an NFT you wish to transfer. 👇</p></div>"
+    for (let eachNft of nfts.result) {
+      let metadata = JSON.parse(eachNft.metadata)
+      let content = `
+                  <div class="card col-md-4 nfts" data-id="${eachNft.token_id}" data-address="${eachNft.token_address}" data-type="${eachNft.contract_type}">
+                    <img src="${metadata.image}" class="card-img-top" height=200>
+                    <div class="card-body">
+                      <h5 class="card-title">${metadata.name}</h5>
+                      <h6 class="card-title">Description</h6>
+                      <p class="card-text">${metadata.description}</p>
+                      <h6 class="card-title">Token Address</h6>
+                      <p class="card-text">${eachNft.token_address}</p>
+                      <p class="card-text"><b>Token ID:</b> ${eachNft.token_id}</p>
+                      <p class="card-text"><b>Contract Type:</b> ${eachNft.contract_type}</p>
+                      <p class="card-text"><b>Available Balance:</b> ${eachNft.amount}</p>
+                    </div>
+                  </div>
+                  `
+      tableOfNFTs.innerHTML += content
+    }
+  }
+
+  setTimeout(function () {
+    let theNFTs = document.getElementsByClassName('nfts')
+    for (let i = 0; i <= theNFTs.length - 1; i++) {
+      // console.log('attributes', theNFTs[i].attributes)
+      theNFTs[i].onclick = function () {
+        $('#nft-transfer-token-id').val(theNFTs[i].attributes[1].value)
+        $('#nft-transfer-type').val(
+          theNFTs[i].attributes[3].value.toLowerCase(),
+        )
+        $('#nft-transfer-contract-address').val(theNFTs[i].attributes[2].value)
+        if (theNFTs[i].attributes[3].value.toLowerCase() == 'erc721') {
+          $('#nft-transfer-amount').val(1)
+        }
+      }
+    }
+  }, 1000)
 }
 
 const getERC20Metadata = async () => {
@@ -876,7 +950,29 @@ const getTransferERC20Balances = async () => {
 }
 
 const transferNFTs = async () => {
-  alert('This feature is coming soon')
+  const type = $('#nft-transfer-type').val()
+  const recipient = $('#nft-transfer-receiver').val()
+  const contract_address = $('#nft-transfer-contract-address').val()
+  const amount = $('#nft-transfer-amount').val()
+  const token_id = $('#nft-transfer-token-id').val()
+  if (type === 'erc721') {
+    const options = {
+      type: type,
+      receiver: recipient,
+      contractAddress: contract_address,
+      tokenId: token_id,
+    }
+  } else {
+    // sending 15 tokens with token id = 1
+    const options = {
+      type: type,
+      receiver: recipient,
+      contractAddress: contract_address,
+      tokenId: token_id,
+      amount: amount,
+    }
+  }
+  let result = await Moralis.transfer(options)
 }
 
 // DASHBOARD LISTENERS
