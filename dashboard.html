@@ -34,6 +34,7 @@
     <!-- STYLING -->
     <link href="css/dashboard.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/dexStyle.css" />
 
     <!-- MORALIS -->
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
@@ -145,8 +146,35 @@
           <hr />
 
           <!-- Exchange -->
-
-          <!-- Token Purchase -->
+          <h5 class="text-center">Exchange</h5>
+          <div class="position-sticky pt-3">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a id="buy-crypto-link" class="nav-link">
+                  <i class="fas fa-shopping-cart"></i>
+                  Buy Crypto
+                </a>
+              </li>
+              <li class="nav-item">
+                <a id="swap-tokens-link" class="nav-link">
+                  <i class="fas fa-random"></i>
+                  Swap Tokens
+                </a>
+              </li>
+              <li class="nav-item">
+                <a id="portfolio-tracker-link" class="nav-link">
+                  <i class="fas fa-chart-line"></i>
+                  Portfolio Tracker
+                </a>
+              </li>
+              <li class="nav-item">
+                <a id="trading-alerts-link" class="nav-link">
+                  <i class="fas fa-bell"></i>
+                  Trading Alerts
+                </a>
+              </li>
+            </ul>
+          </div>
 
           <!-- Hide Sidebar Button -->
           <button id="sidebarMenuMinMaxButton" class="btn btn-link btn-sm">
@@ -720,6 +748,153 @@
               <div id="ERC20Output" class="container col-md-12"></div>
             </div>
           </div>
+
+          <!-- EXCHANGE -->
+          <div id="section4">
+            <!-- Buy Crypto -->
+            <div id="buyCrypto" class="col-md-12">
+              <h2>Buy Crypto</h2>
+              <div>
+                <p class="m-3 text-center h6">
+                  Looking for an easy way to convert your fiat to crypto? Let us
+                  help.
+                </p>
+              </div>
+
+              <div class="d-flex">
+                <!-- ADDRESS search -->
+                <div class="container mt-3 col-md-6"></div>
+              </div>
+            </div>
+
+            <!-- Sawp Tokens -->
+            <div id="swapTokens" class="col-md-12">
+              <h2>Swap Tokens</h2>
+              <div>
+                <p class="m-3 text-center h6">
+                  Easily swap your tokens right here inside your wallet.
+                </p>
+              </div>
+
+              <div class="container">
+                <div class="row">
+                  <div class="col col-md-6 offset-md-3" id="window">
+                    <h4>Swap</h4>
+                    <div id="form">
+                      <!-- from input -->
+                      <div class="swapbox">
+                        <div
+                          class="swapbox_select token_select"
+                          id="from_token_select"
+                        >
+                          <img class="token_image" id="from_token_img" />
+                          <span id="from_token_text">ETH</span>
+
+                          <span class="dropdownArrow">
+                            <i class="fas fa-angle-down"></i>
+                          </span>
+                        </div>
+                        <div class="swapbox_select">
+                          <input
+                            class="number form-control"
+                            placeholder="0.0"
+                            id="from_amount"
+                          />
+                        </div>
+                      </div>
+
+                      <!-- to input -->
+                      <div class="swapbox">
+                        <div
+                          class="swapbox_select token_select"
+                          id="to_token_select"
+                        >
+                          <img class="token_image" id="to_token_img" />
+                          <span id="to_token_text">SELECT TOKEN</span>
+
+                          <span class="dropdownArrow">
+                            <i class="fas fa-angle-down"></i>
+                          </span>
+                        </div>
+                        <div class="swapbox_select">
+                          <input
+                            class="number form-control"
+                            placeholder="0.0"
+                            id="to_amount"
+                          />
+                        </div>
+                      </div>
+                      <!-- gas estimation -->
+                      <div>
+                        Estimated Gas:
+                        <span id="gas_estimate"></span>
+                      </div>
+                      <button
+                        disabled
+                        class="btn btn-large btn-primary btn-block"
+                        id="swap_button"
+                      >
+                        Swap
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Modal for tokens to be listed -->
+              <div class="modal" id="token_modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Select token</h5>
+                      <button
+                        id="modal_close"
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                      >
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div id="token_list"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Portfolio Tracker -->
+            <div id="portfolioTracker" class="col-md-12">
+              <h2>Track Your Portfolio</h2>
+              <div>
+                <p class="m-3 text-center h6">
+                  Smart investors know that they must track the performance of
+                  their portfolio. Here is an easy way for you to do that.
+                </p>
+              </div>
+
+              <div class="d-flex">
+                <div class="container mt-3 col-md-6"></div>
+              </div>
+            </div>
+
+            <!-- Trading Alerts -->
+            <div id="tradingAlerts" class="col-md-12">
+              <h2>Trading Alerts</h2>
+              <div>
+                <p class="m-3 text-center h6">
+                  COMING SOON
+                </p>
+              </div>
+
+              <div class="d-flex">
+                <!-- ADDRESS search -->
+                <div class="container mt-3 col-md-6"></div>
+              </div>
+            </div>
+          </div>
         </main>
       </div>
     </div>
@@ -737,5 +912,6 @@
     ></script>
     <script src="dashboard.js"></script>
     <script src="main.js"></script>
+    <script src="dex.js"></script>
   </body>
 </html>

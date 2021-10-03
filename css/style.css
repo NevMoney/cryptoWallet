@@ -11,14 +11,18 @@
     font-size: 3.5rem;
   }
 }
-
+/* 
+#swapTokens, */
 #transferETH,
 #transferERC20,
 #transferNFTs,
 #transactionsSection,
 #balancesSection,
 #nftSection,
-#ERC20MetadataContent {
+#ERC20MetadataContent,
+#buyCrypto,
+#portfolioTracker,
+#tradingAlerts {
   display: none;
 }
 

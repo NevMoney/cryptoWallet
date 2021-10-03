@@ -17,6 +17,7 @@ if (currentUser) {
   $('#greetLoggedInUser').append(
     `<h1>Welcome ${currentUser.get('username')}</h1>`,
   )
+  document.getElementById('swap_button').disabled = false
 }
 
 // redirect based on whether they are logged in
@@ -105,6 +106,10 @@ const renderContent = (element) => {
     '#nftSection',
     '#starter',
     '#ERC20MetadataContent',
+    '#buyCrypto',
+    // '#swapTokens',
+    '#portfolioTracker',
+    '#tradingAlerts',
   ]
   elements.forEach((e) => {
     hideContent(e)
@@ -715,6 +720,22 @@ const displayERC20Metadata = () => {
   renderContent('#ERC20MetadataContent')
 }
 
+const displayBuyCrypto = () => {
+  renderContent('#buyCrypto')
+}
+
+const displaySwapTokens = () => {
+  renderContent('#swapTokens')
+}
+
+const displayPortfolioTracker = () => {
+  renderContent('#portfolioTracker')
+}
+
+const displayTradingAlerts = () => {
+  renderContent('#tradingAlerts')
+}
+
 // TRANSFER FUNCTIONS
 const transferETH = async () => {
   let _amount = String(document.querySelector('#amountOfETH').value)
@@ -1062,6 +1083,14 @@ $('#sidebarMenuMinMaxButton').on('click', function () {
       '<i class="fas fa-hand-holding-usd"></i> Transfer NFT',
     )
     $('#show-ERC20-metadata').html('<i class="fas fa-code"></i> Token Metadata')
+    $('#buy-crypto-link').html(
+      '<i class="fas fa-shopping-cart"></i> Buy Crypto',
+    )
+    $('#swap-tokens-link').html('<i class="fas fa-random"></i> Swap Tokens')
+    $('#portfolio-tracker-link').html(
+      '<i class="fas fa-chart-line"></i> Portfolio Tracker',
+    )
+    $('#trading-alerts-link').html('<i class="fas fa-bell"></i> Trading Alerts')
 
     // $('#get-transactions-link') should be a link with cursor pointer
     $('#get-transactions-link').css('cursor', 'pointer')
@@ -1086,6 +1115,10 @@ $('#sidebarMenuMinMaxButton').on('click', function () {
     $('#transfer-ERC20').html('<i class="fas fa-sync"></i>')
     $('#transfer-nfts').html('<i class="fas fa-hand-holding-usd"></i>')
     $('#show-ERC20-metadata').html('<i class="fas fa-code"></i>')
+    $('#buy-crypto-link').html('<i class="fas fa-shopping-cart"></i>')
+    $('#swap-tokens-link').html('<i class="fas fa-random"></i>')
+    $('#portfolio-tracker-link').html('<i class="fas fa-chart-line"></i>')
+    $('#trading-alerts-link').html('<i class="fas fa-bell"></i>')
 
     // adjust padding for $('#get-transactions-link')
     $('#get-transactions-link').css('padding-left', '16px')
@@ -1098,5 +1131,9 @@ $('#sidebarMenuMinMaxButton').on('click', function () {
     $('#transfer-ERC20').on('click', displaytransferERC20)
     $('#transfer-nfts').on('click', displaytransferNFTs)
     $('#show-ERC20-metadata').on('click', displayERC20Metadata)
+    $('#buy-crypto-link').on('click', displayBuyCrypto)
+    $('#swap-tokens-link').on('click', displaySwapTokens)
+    $('#portfolio-tracker-link').on('click', displayPortfolioTracker)
+    $('#trading-alerts-link').on('click', displayTradingAlerts)
   }
 })
