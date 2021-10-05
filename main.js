@@ -279,30 +279,33 @@ const getNativeBalances = async () => {
 }
 
 const getERC20Balances = async () => {
-  let ethTokens = await Moralis.Web3API.account.getTokenBalances()
-  let ropstenTokens = await Moralis.Web3API.account.getTokenBalances({
-    chain: 'ropsten',
-  })
-  let avalancheTokens = await Moralis.Web3API.account.getTokenBalances({
-    chain: 'avalanche',
-  })
-  let binanceTokens = await Moralis.Web3API.account.getTokenBalances({
-    chain: 'bsc',
-  })
-  let polygonTokens = await Moralis.Web3API.account.getTokenBalances({
-    chain: 'matic',
-  })
-  let rinkebyTokens = await Moralis.Web3API.account.getTokenBalances({
-    chain: 'rinkeby',
-  })
+  let chain = identifyChain()
+  // let ethTokens = await Moralis.Web3API.account.getTokenBalances()
+  // let ropstenTokens = await Moralis.Web3API.account.getTokenBalances({
+  //   chain: 'ropsten',
+  // })
+  // let avalancheTokens = await Moralis.Web3API.account.getTokenBalances({
+  //   chain: 'avalanche',
+  // })
+  // let binanceTokens = await Moralis.Web3API.account.getTokenBalances({
+  //   chain: 'bsc',
+  // })
+  // let polygonTokens = await Moralis.Web3API.account.getTokenBalances({
+  //   chain: 'matic',
+  // })
+  // let rinkebyTokens = await Moralis.Web3API.account.getTokenBalances({
+  //   chain: 'rinkeby',
+  // })
 
+  let tokens = await Moralis.Web3API.account.getTokenBalances({ chain: chain })
+  console.log('tokens', tokens)
   let otherBalancesContent = document.querySelector('#otherBalances')
   otherBalancesContent.innerHTML = ''
 
-  if (ethTokens.length > 0) {
+  if (tokens.length > 0) {
     let tokenBalanceContent = ''
 
-    ethTokens.forEach((e, i) => {
+    tokens.forEach((e, i) => {
       let content = `
     
                 <tr>
@@ -319,106 +322,106 @@ const getERC20Balances = async () => {
     })
     otherBalancesContent.innerHTML += tokenBalanceContent
   }
-  if (avalancheTokens.length > 0) {
-    let tokenBalanceContent = ''
+  // if (avalancheTokens.length > 0) {
+  //   let tokenBalanceContent = ''
 
-    avalancheTokens.forEach((e, i) => {
-      let content = `
-    
-                <tr>
-                <td>${e.name}</td>
-                <td>${e.symbol}</td>
-                <td>${e.balance / ('1e' + e.decimals)} ${e.symbol}</td>
-                <td>${e.decimals}</td>
-                <td>Avalanche</td>
-                <td>${e.token_address}</td>
-                </tr>
-    
-                `
-      tokenBalanceContent += content
-    })
-    otherBalancesContent.innerHTML += tokenBalanceContent
-  }
-  if (polygonTokens.length > 0) {
-    let tokenBalanceContent = ''
+  //   avalancheTokens.forEach((e, i) => {
+  //     let content = `
 
-    polygonTokens.forEach((e, i) => {
-      let content = `
-    
-                <tr>
-                <td>${e.name}</td>
-                <td>${e.symbol}</td>
-                <td>${e.balance / ('1e' + e.decimals)} ${e.symbol}</td>
-                <td>${e.decimals}</td>
-                <td>Polygon</td>
-                <td>${e.token_address}</td>
-                </tr>
-    
-                `
-      tokenBalanceContent += content
-    })
-    otherBalancesContent.innerHTML += tokenBalanceContent
-  }
-  if (binanceTokens.length > 0) {
-    let tokenBalanceContent = ''
+  //               <tr>
+  //               <td>${e.name}</td>
+  //               <td>${e.symbol}</td>
+  //               <td>${e.balance / ('1e' + e.decimals)} ${e.symbol}</td>
+  //               <td>${e.decimals}</td>
+  //               <td>Avalanche</td>
+  //               <td>${e.token_address}</td>
+  //               </tr>
 
-    binanceTokens.forEach((e, i) => {
-      let content = `
-    
-                <tr>
-                <td>${e.name}</td>
-                <td>${e.symbol}</td>
-                <td>${e.balance / ('1e' + e.decimals)} ${e.symbol}</td>
-                <td>${e.decimals}</td>
-                <td>Binance</td>
-                <td>${e.token_address}</td>
-                </tr>
-    
-                `
-      tokenBalanceContent += content
-    })
-    otherBalancesContent.innerHTML += tokenBalanceContent
-  }
-  if (ropstenTokens.length > 0) {
-    let tokenBalanceContent = ''
+  //               `
+  //     tokenBalanceContent += content
+  //   })
+  //   otherBalancesContent.innerHTML += tokenBalanceContent
+  // }
+  // if (polygonTokens.length > 0) {
+  //   let tokenBalanceContent = ''
 
-    ropstenTokens.forEach((e, i) => {
-      let content = `
-    
-                <tr>
-                <td>${e.name}</td>
-                <td>${e.symbol}</td>
-                <td>${e.balance / ('1e' + e.decimals)} ${e.symbol}</td>
-                <td>${e.decimals}</td>
-                <td>Ropsten</td>
-                <td>${e.token_address}</td>
-                </tr>
-    
-                `
-      tokenBalanceContent += content
-    })
-    otherBalancesContent.innerHTML += tokenBalanceContent
-  }
-  if (rinkebyTokens.length > 0) {
-    let tokenBalanceContent = ''
+  //   polygonTokens.forEach((e, i) => {
+  //     let content = `
 
-    rinkebyTokens.forEach((e, i) => {
-      let content = `
-    
-                <tr>
-                <td>${e.name}</td>
-                <td>${e.symbol}</td>
-                <td>${e.balance / ('1e' + e.decimals)} ${e.symbol}</td>
-                <td>${e.decimals}</td>
-                <td>Rinkeby</td>
-                <td>${e.token_address}</td>
-                </tr>
-    
-                `
-      tokenBalanceContent += content
-    })
-    otherBalancesContent.innerHTML += tokenBalanceContent
-  }
+  //               <tr>
+  //               <td>${e.name}</td>
+  //               <td>${e.symbol}</td>
+  //               <td>${e.balance / ('1e' + e.decimals)} ${e.symbol}</td>
+  //               <td>${e.decimals}</td>
+  //               <td>Polygon</td>
+  //               <td>${e.token_address}</td>
+  //               </tr>
+
+  //               `
+  //     tokenBalanceContent += content
+  //   })
+  //   otherBalancesContent.innerHTML += tokenBalanceContent
+  // }
+  // if (binanceTokens.length > 0) {
+  //   let tokenBalanceContent = ''
+
+  //   binanceTokens.forEach((e, i) => {
+  //     let content = `
+
+  //               <tr>
+  //               <td>${e.name}</td>
+  //               <td>${e.symbol}</td>
+  //               <td>${e.balance / ('1e' + e.decimals)} ${e.symbol}</td>
+  //               <td>${e.decimals}</td>
+  //               <td>Binance</td>
+  //               <td>${e.token_address}</td>
+  //               </tr>
+
+  //               `
+  //     tokenBalanceContent += content
+  //   })
+  //   otherBalancesContent.innerHTML += tokenBalanceContent
+  // }
+  // if (ropstenTokens.length > 0) {
+  //   let tokenBalanceContent = ''
+
+  //   ropstenTokens.forEach((e, i) => {
+  //     let content = `
+
+  //               <tr>
+  //               <td>${e.name}</td>
+  //               <td>${e.symbol}</td>
+  //               <td>${e.balance / ('1e' + e.decimals)} ${e.symbol}</td>
+  //               <td>${e.decimals}</td>
+  //               <td>Ropsten</td>
+  //               <td>${e.token_address}</td>
+  //               </tr>
+
+  //               `
+  //     tokenBalanceContent += content
+  //   })
+  //   otherBalancesContent.innerHTML += tokenBalanceContent
+  // }
+  // if (rinkebyTokens.length > 0) {
+  //   let tokenBalanceContent = ''
+
+  //   rinkebyTokens.forEach((e, i) => {
+  //     let content = `
+
+  //               <tr>
+  //               <td>${e.name}</td>
+  //               <td>${e.symbol}</td>
+  //               <td>${e.balance / ('1e' + e.decimals)} ${e.symbol}</td>
+  //               <td>${e.decimals}</td>
+  //               <td>Rinkeby</td>
+  //               <td>${e.token_address}</td>
+  //               </tr>
+
+  //               `
+  //     tokenBalanceContent += content
+  //   })
+  //   otherBalancesContent.innerHTML += tokenBalanceContent
+  // }
 }
 
 const getNFTs = async () => {
