@@ -34,6 +34,7 @@ function identifyChain() {
   } else if (chain === '0x539') {
     chain = 'localdevchain'
   }
+  console.log('chain', chain)
   return chain
 }
 
@@ -136,15 +137,18 @@ async function getQuote() {
     amount: amount,
   })
 
-  console.log('quote', quote)
   console.log('quoteResult', quote.result)
-  console.log('quoteResult.result', quote.result.result)
+
+  let toAmount =
+    quote.result.toTokenAmount / 10 ** quote.result.toToken.decimals
+  toAmount = toAmount.toFixed(6)
+
   document.getElementById('gas_estimate').innerHTML = quote.result.estimatedGas
-  document.getElementById('to_amount').value =
-    quote.result.toToken.toTokenAmount / 10 ** quote.result.toToken.decimals
+  document.getElementById('to_amount').value = toAmount
 }
 
 async function trySwap() {
+  let chain = identifyChain()
   let address = Moralis.User.current().get('ethAddress')
   let amount = Number(
     document.getElementById('from_amount').value *
@@ -152,7 +156,7 @@ async function trySwap() {
   )
   if (currentTrade.from.symbol !== 'ETH') {
     const allowance = await Moralis.Plugins.oneInch.hasAllowance({
-      chain: 'eth', // The blockchain you want to use (eth/bsc/polygon)
+      chain: chain, // The blockchain you want to use (eth/bsc/polygon)
       fromTokenAddress: currentTrade.from.address, // The token you want to swap
       fromAddress: address, // Your wallet address
       amount: amount,
@@ -160,7 +164,7 @@ async function trySwap() {
     console.log(allowance)
     if (!allowance) {
       await Moralis.Plugins.oneInch.approve({
-        chain: 'eth', // The blockchain you want to use (eth/bsc/polygon)
+        chain: chain, // The blockchain you want to use (eth/bsc/polygon)
         tokenAddress: currentTrade.from.address, // The token you want to swap
         fromAddress: address, // Your wallet address
       })
@@ -175,8 +179,9 @@ async function trySwap() {
 }
 
 function doSwap(userAddress, amount) {
+  let chain = identifyChain()
   return Moralis.Plugins.oneInch.swap({
-    chain: 'eth', // The blockchain you want to use (eth/bsc/polygon)
+    chain: chain, // The blockchain you want to use (eth/bsc/polygon)
     fromTokenAddress: currentTrade.from.address, // The token you want to swap
     toTokenAddress: currentTrade.to.address, // The token you want to receive
     amount: amount,
