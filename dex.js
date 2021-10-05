@@ -9,7 +9,7 @@ async function init() {
 
 init()
 
-async function listAvailableTokens() {
+function identifyChain() {
   let chain = window.ethereum['chainId']
   if (chain === '0x1') {
     chain = 'eth'
@@ -34,7 +34,11 @@ async function listAvailableTokens() {
   } else if (chain === '0x539') {
     chain = 'localdevchain'
   }
+  return chain
+}
 
+async function listAvailableTokens() {
+  let chain = identifyChain()
   const result = await Moralis.Plugins.oneInch.getSupportedTokens({
     chain: chain, // The blockchain you want to use (eth/bsc/polygon)
   })
@@ -123,16 +127,21 @@ async function getQuote() {
       10 ** currentTrade.from.decimals,
   )
 
+  let chain = identifyChain()
+
   const quote = await Moralis.Plugins.oneInch.quote({
-    chain: 'eth', // The blockchain you want to use (eth/bsc/polygon)
+    chain: chain, // The blockchain you want to use (eth/bsc/polygon)
     fromTokenAddress: currentTrade.from.address, // The token you want to swap
     toTokenAddress: currentTrade.to.address, // The token you want to receive
     amount: amount,
   })
+
   console.log('quote', quote)
-  document.getElementById('gas_estimate').innerHTML = quote.estimatedGas
+  console.log('quoteResult', quote.result)
+  console.log('quoteResult.result', quote.result.result)
+  document.getElementById('gas_estimate').innerHTML = quote.result.estimatedGas
   document.getElementById('to_amount').value =
-    quote.toTokenAmount / 10 ** quote.toToken.decimals
+    quote.result.toToken.toTokenAmount / 10 ** quote.result.toToken.decimals
 }
 
 async function trySwap() {
