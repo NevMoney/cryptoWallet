@@ -38,8 +38,17 @@ function identifyChain() {
   return chain
 }
 
+// function to reload the page on chain change
+window.ethereum.on('chainChanged', () => {
+  window.location.reload()
+})
+
 async function listAvailableTokens() {
   let chain = identifyChain()
+  if (chain != 'eth') {
+    alert('You can only swap on Ethereum Mainnet')
+    return
+  }
   const result = await Moralis.Plugins.oneInch.getSupportedTokens({
     chain: chain, // The blockchain you want to use (eth/bsc/polygon)
   })
@@ -86,19 +95,20 @@ document.getElementById('tokenSearch').onkeyup = () => {
 
 function selectToken(address) {
   closeModal()
-  console.log('tokens', tokens)
   currentTrade[currentSelectSide] = tokens[address]
-  console.log('currentTrade', currentTrade)
   document.getElementById('tokenSearch').value = ''
   renderInterface()
   getQuote()
 }
 
-function renderInterface() {
+async function renderInterface() {
+  let balance = await getMySelectedTokenBalance(currentTrade.from.address)
   if (currentTrade.from) {
     document.getElementById('from_token_img').src = currentTrade.from.logoURI
     document.getElementById('from_token_text').innerHTML =
       currentTrade.from.symbol
+    console.log(currentTrade.from)
+    $('#holdingBalance').html(`Account balance: ${balance}`)
   }
   if (currentTrade.to) {
     document.getElementById('to_token_img').src = currentTrade.to.logoURI
@@ -147,6 +157,26 @@ async function getQuote() {
   document.getElementById('to_amount').value = toAmount
 }
 
+async function getMySelectedTokenBalance(tokenAddress) {
+  let chain = identifyChain()
+  let tokenBalances = await Moralis.Web3API.account.getTokenBalances({
+    chain: chain,
+  })
+  console.log('tokenBalances', tokenBalances)
+  const ethBalance = await Moralis.Web3API.account.getNativeBalance()
+  console.log(ethBalance.balance)
+
+  // loop through tokenBalances and find the token with the matching address
+  for (let i = 0; i < tokenBalances.length; i++) {
+    let token = tokenBalances[i]
+    if (token.address === tokenAddress) {
+      return token.balance
+    }
+  }
+  // if no token found, return 0
+  return 0
+}
+
 async function trySwap() {
   let chain = identifyChain()
   let address = Moralis.User.current().get('ethAddress')
@@ -155,57 +185,34 @@ async function trySwap() {
       10 ** currentTrade.from.decimals,
   )
 
-  let tokenBalance = await Moralis.Web3API.account.getTokenBalances({
-    chain: chain,
-  })
-  console.log('tokenBalance', tokenBalance)
-  const ethBalance = await Moralis.Web3API.account.getNativeBalance()
-  console.log(ethBalance)
-  if (tokenBalance.length == 0) {
-    alert(`You don't seem to have any ERC20 tokens`)
-  } else {
-    // loop through the array of objects
-    tokenBalance.forEach((token) => {
-      // get token that user holds
-      let holding = token.token_address
-      let amountHeld = token.balance
-      // check if the holding corresponds to the fromTokenAddress
-      if (holding == currentTrade.from.address) {
-        // create a new div inside the #from_token_select and then append the amountHeld
-        console.log('holding is same as from address')
-      } else {
-        console.log('from address is not within holdings')
-      }
+  if (currentTrade.from.symbol !== 'ETH') {
+    const allowance = await Moralis.Plugins.oneInch.hasAllowance({
+      chain: chain, // The blockchain you want to use (eth/bsc/polygon)
+      fromTokenAddress: currentTrade.from.address, // The token you want to swap
+      fromAddress: address, // Your wallet address
+      amount: amount,
     })
+    console.log('allowance', allowance.result)
+    if (allowance.result === false) {
+      await Moralis.Plugins.oneInch.approve({
+        chain: chain, // The blockchain you want to use (eth/bsc/polygon)
+        tokenAddress: currentTrade.from.address, // The token you want to swap
+        fromAddress: address, // Your wallet address
+      })
+    }
   }
-  // if (currentTrade.from.symbol !== 'ETH') {
-  //   const allowance = await Moralis.Plugins.oneInch.hasAllowance({
-  //     chain: chain, // The blockchain you want to use (eth/bsc/polygon)
-  //     fromTokenAddress: currentTrade.from.address, // The token you want to swap
-  //     fromAddress: address, // Your wallet address
-  //     amount: amount,
-  //   })
-  //   console.log('allowance', allowance.result)
-  //   if (allowance.result === false) {
-  //     await Moralis.Plugins.oneInch.approve({
-  //       chain: chain, // The blockchain you want to use (eth/bsc/polygon)
-  //       tokenAddress: currentTrade.from.address, // The token you want to swap
-  //       fromAddress: address, // Your wallet address
-  //     })
-  //   }
-  // }
-  // try {
-  //   let receipt = await doSwap(address, amount)
-  //   console.log(receipt)
-  //   // if there is an error
-  //   if (receipt.result.statusCode != 200) {
-  //     alert(`ERROR: ${receipt.result.message}`)
-  //   } else {
-  //     alert(`Success: ${receipt.result.message}`)
-  //   }
-  // } catch (error) {
-  //   console.log(error)
-  // }
+  try {
+    let receipt = await doSwap(address, amount)
+    console.log(receipt)
+    // if there is an error
+    if (receipt.result.statusCode != 200) {
+      alert(`ERROR: ${receipt.result.message}`)
+    } else {
+      alert(`Success: ${receipt.result.message}`)
+    }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 function doSwap(userAddress, amount) {
