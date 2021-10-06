@@ -51,6 +51,7 @@
 
 .token_image {
   width: 25%;
+  padding-left: 0.25rem;
 }
 
 #to_token_text,
@@ -68,7 +69,7 @@
 }
 
 .token_row:hover {
-  background-color: #e4e4e4;
+  background-color: #4a4a4a;
   cursor: pointer;
 }
 
@@ -101,7 +102,7 @@
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   float: right;
   width: 50%;
-  padding-right: 5px;
+  padding-right: 5%;
 }
 
 .number:focus {
@@ -113,7 +114,8 @@
 }
 
 .dropdownArrow {
-  text-align: end;
+  float: right;
+  padding-right: 5%;
 }
 
 #holdingBalance {
@@ -124,5 +126,28 @@
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   float: right;
   width: 30%;
-  /* padding-right: 5px; */
+}
+
+.decorationText {
+  font-size: small;
+  font-weight: 100;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  float: left;
+  padding-left: 7px;
+  padding-top: 3px;
+}
+
+#token_modal {
+  /* move slightly to the right and make the modal smaller */
+  margin-left: 38%;
+  width: 41%;
+}
+
+#token_modal .modal-body {
+  height: 350px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: #565656;
+  color: #d5cece;
 }

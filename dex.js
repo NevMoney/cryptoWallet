@@ -34,7 +34,7 @@ function identifyChain() {
   } else if (chain === '0x539') {
     chain = 'localdevchain'
   }
-  console.log('chain', chain)
+  // console.log('chain', chain)
   return chain
 }
 
@@ -55,6 +55,7 @@ async function listAvailableTokens() {
   tokens = result.result.tokens
 
   let parent = document.getElementById('token_list')
+
   for (const address in tokens) {
     let token = tokens[address]
     let div = document.createElement('div')
@@ -64,6 +65,7 @@ async function listAvailableTokens() {
         <img class="token_list_img" src="${token.logoURI}">
         <span class="token_list_text">${token.symbol}</span>
         `
+
     div.innerHTML = html
     div.onclick = () => {
       selectToken(address)
@@ -103,6 +105,7 @@ function selectToken(address) {
 
 async function renderInterface() {
   let balance = await getMySelectedTokenBalance(currentTrade.from.address)
+
   if (currentTrade.from) {
     document.getElementById('from_token_img').src = currentTrade.from.logoURI
     document.getElementById('from_token_text').innerHTML =
