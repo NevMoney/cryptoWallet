@@ -107,7 +107,7 @@ const renderContent = (element) => {
     '#starter',
     '#ERC20MetadataContent',
     '#buyCrypto',
-    // '#swapTokens',
+    '#swapTokens',
     '#portfolioTracker',
     '#tradingAlerts',
   ]
@@ -280,22 +280,6 @@ const getNativeBalances = async () => {
 
 const getERC20Balances = async () => {
   let chain = identifyChain()
-  // let ethTokens = await Moralis.Web3API.account.getTokenBalances()
-  // let ropstenTokens = await Moralis.Web3API.account.getTokenBalances({
-  //   chain: 'ropsten',
-  // })
-  // let avalancheTokens = await Moralis.Web3API.account.getTokenBalances({
-  //   chain: 'avalanche',
-  // })
-  // let binanceTokens = await Moralis.Web3API.account.getTokenBalances({
-  //   chain: 'bsc',
-  // })
-  // let polygonTokens = await Moralis.Web3API.account.getTokenBalances({
-  //   chain: 'matic',
-  // })
-  // let rinkebyTokens = await Moralis.Web3API.account.getTokenBalances({
-  //   chain: 'rinkeby',
-  // })
 
   let tokens = await Moralis.Web3API.account.getTokenBalances({ chain: chain })
   console.log('tokens', tokens)
@@ -313,7 +297,7 @@ const getERC20Balances = async () => {
                 <td>${e.symbol}</td>
                 <td>${e.balance / ('1e' + e.decimals)} ${e.symbol}</td>
                 <td>${e.decimals}</td>
-                <td>Ethereum</td>
+                <td>${chain}</td>
                 <td>${e.token_address}</td>
                 </tr>
     
@@ -322,106 +306,6 @@ const getERC20Balances = async () => {
     })
     otherBalancesContent.innerHTML += tokenBalanceContent
   }
-  // if (avalancheTokens.length > 0) {
-  //   let tokenBalanceContent = ''
-
-  //   avalancheTokens.forEach((e, i) => {
-  //     let content = `
-
-  //               <tr>
-  //               <td>${e.name}</td>
-  //               <td>${e.symbol}</td>
-  //               <td>${e.balance / ('1e' + e.decimals)} ${e.symbol}</td>
-  //               <td>${e.decimals}</td>
-  //               <td>Avalanche</td>
-  //               <td>${e.token_address}</td>
-  //               </tr>
-
-  //               `
-  //     tokenBalanceContent += content
-  //   })
-  //   otherBalancesContent.innerHTML += tokenBalanceContent
-  // }
-  // if (polygonTokens.length > 0) {
-  //   let tokenBalanceContent = ''
-
-  //   polygonTokens.forEach((e, i) => {
-  //     let content = `
-
-  //               <tr>
-  //               <td>${e.name}</td>
-  //               <td>${e.symbol}</td>
-  //               <td>${e.balance / ('1e' + e.decimals)} ${e.symbol}</td>
-  //               <td>${e.decimals}</td>
-  //               <td>Polygon</td>
-  //               <td>${e.token_address}</td>
-  //               </tr>
-
-  //               `
-  //     tokenBalanceContent += content
-  //   })
-  //   otherBalancesContent.innerHTML += tokenBalanceContent
-  // }
-  // if (binanceTokens.length > 0) {
-  //   let tokenBalanceContent = ''
-
-  //   binanceTokens.forEach((e, i) => {
-  //     let content = `
-
-  //               <tr>
-  //               <td>${e.name}</td>
-  //               <td>${e.symbol}</td>
-  //               <td>${e.balance / ('1e' + e.decimals)} ${e.symbol}</td>
-  //               <td>${e.decimals}</td>
-  //               <td>Binance</td>
-  //               <td>${e.token_address}</td>
-  //               </tr>
-
-  //               `
-  //     tokenBalanceContent += content
-  //   })
-  //   otherBalancesContent.innerHTML += tokenBalanceContent
-  // }
-  // if (ropstenTokens.length > 0) {
-  //   let tokenBalanceContent = ''
-
-  //   ropstenTokens.forEach((e, i) => {
-  //     let content = `
-
-  //               <tr>
-  //               <td>${e.name}</td>
-  //               <td>${e.symbol}</td>
-  //               <td>${e.balance / ('1e' + e.decimals)} ${e.symbol}</td>
-  //               <td>${e.decimals}</td>
-  //               <td>Ropsten</td>
-  //               <td>${e.token_address}</td>
-  //               </tr>
-
-  //               `
-  //     tokenBalanceContent += content
-  //   })
-  //   otherBalancesContent.innerHTML += tokenBalanceContent
-  // }
-  // if (rinkebyTokens.length > 0) {
-  //   let tokenBalanceContent = ''
-
-  //   rinkebyTokens.forEach((e, i) => {
-  //     let content = `
-
-  //               <tr>
-  //               <td>${e.name}</td>
-  //               <td>${e.symbol}</td>
-  //               <td>${e.balance / ('1e' + e.decimals)} ${e.symbol}</td>
-  //               <td>${e.decimals}</td>
-  //               <td>Rinkeby</td>
-  //               <td>${e.token_address}</td>
-  //               </tr>
-
-  //               `
-  //     tokenBalanceContent += content
-  //   })
-  //   otherBalancesContent.innerHTML += tokenBalanceContent
-  // }
 }
 
 const getNFTs = async () => {
@@ -729,6 +613,10 @@ const displayBuyCrypto = () => {
 
 const displaySwapTokens = () => {
   renderContent('#swapTokens')
+  let chain = identifyChain()
+  if (chain != 'eth') {
+    alert('You can only swap on Ethereum Mainnet')
+  }
 }
 
 const displayPortfolioTracker = () => {
@@ -1033,6 +921,14 @@ if (window.location.href == dashboard) {
   $('#btn-get-transactions2').on('click', getTransferNFTs)
 
   $('#btn-transfer-selected-nft').on('click', transferNFTs)
+
+  $('#swap-tokens-link').on('click', displaySwapTokens)
+
+  $('#buy-crypto-link').on('click', displayBuyCrypto)
+
+  $('#portfolio-tracker-link').on('click', displayPortfolioTracker)
+
+  $('#tradin-alerts-link').on('click', displayTradingAlerts)
 
   $('#transferERC20GetBalances').on('click', function () {
     $('#transferERC20BalanceTable').show()

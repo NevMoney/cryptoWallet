@@ -45,10 +45,7 @@ window.ethereum.on('chainChanged', () => {
 
 async function listAvailableTokens() {
   let chain = identifyChain()
-  if (chain != 'eth') {
-    alert('You can only swap on Ethereum Mainnet')
-    return
-  }
+
   const result = await Moralis.Plugins.oneInch.getSupportedTokens({
     chain: chain, // The blockchain you want to use (eth/bsc/polygon)
   })
@@ -182,6 +179,7 @@ async function getMySelectedTokenBalance(tokenAddress) {
 
 async function trySwap() {
   let chain = identifyChain()
+
   let address = Moralis.User.current().get('ethAddress')
   let amount = Number(
     document.getElementById('from_amount').value *
@@ -228,6 +226,16 @@ function doSwap(userAddress, amount) {
     fromAddress: userAddress, // Your wallet address
     slippage: 1,
   })
+}
+
+// buy crypto
+async function fiatCryptoBuy() {
+  console.log('clicked')
+  let response = await Moralis.Plugins.fiat.buy(undefined, {
+    disableTrigger: true,
+  })
+  document.getElementById('fiat_crypto_buy_result').style.display = 'block'
+  document.getElementById('fiat_crypto_buy_result').src = response.result.data
 }
 
 document.getElementById('modal_close').onclick = closeModal

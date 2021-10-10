@@ -759,11 +759,29 @@
                   Looking for an easy way to convert your fiat to crypto? Let us
                   help.
                 </p>
+                <p class="m-3 text-center text-large">
+                  We partnered with top rated providers to give you the most
+                  flexibility and best rates possible.
+                </p>
+                <br />
+                <button
+                  class="btn btn-primary col-md-4"
+                  id="btn-buy-crypto-with-fiat"
+                  onclick="fiatCryptoBuy()"
+                >
+                  Buy Crypto With Fiat
+                  <i class="fas fa-sync-alt"></i>
+                </button>
               </div>
 
-              <div class="d-flex">
-                <!-- ADDRESS search -->
-                <div class="container mt-3 col-md-6"></div>
+              <div>
+                <iframe
+                  id="fiat_crypto_buy_result"
+                  class="col-md-12"
+                  height="650"
+                  src=""
+                  style="display: none;"
+                ></iframe>
               </div>
             </div>
 
