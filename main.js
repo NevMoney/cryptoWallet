@@ -7,6 +7,7 @@ Moralis.Web3.getSigningData = () => 'Welcome to Tsaishen Crypto Wallet.'
 let domain = 'http://127.0.0.1:5500/'
 let homepage = `${domain}index.html`
 let dashboard = `${domain}dashboard.html`
+let toks = []
 
 // REDIRECT USER BASED ON STATUS
 const currentUser = Moralis.User.current()
@@ -621,6 +622,7 @@ const displaySwapTokens = () => {
 
 const displayPortfolioTracker = () => {
   renderContent('#portfolioTracker')
+  launch()
 }
 
 const displayTradingAlerts = () => {
@@ -897,6 +899,78 @@ const transferNFTs = async () => {
   }
 }
 
+// PORTFOLIO FUNCTIONS
+async function launch() {
+  let response = await fetch('https://gateway.ipfs.io/ipns/tokens.uniswap.org')
+  let names = await response.json()
+  toks = names.tokens
+
+  toks.forEach((e, i) =>
+    document.getElementById('list').add(new Option(e.symbol, i)),
+  )
+
+  priceHistory()
+}
+
+launch()
+
+async function priceHistory() {
+  let chain = identifyChain()
+  let days = document.querySelector('input[name="time"]:checked').value
+  let i = document.getElementById('list').value
+  let addrs = toks[i].address
+  let sym = toks[i].symbol
+
+  console.log('priceHistory', days, addrs, sym)
+
+  //Boiler plate examples
+  let dates = ['2021-09-30', '2021-10-01', '2021-10-02', '2021-10-03']
+  let blocks = [13321721, 13331721, 13341721]
+  let prices = [4, 6, 3]
+  //Boiler plate examples
+
+  //Get token price
+  const price = await Moralis.Web3API.token.getTokenPrice({ address: addrs })
+  console.log('price', price)
+
+  // token price at specific block
+  const price2 = await Moralis.Web3API.token.getTokenPrice({
+    address: addrs,
+    to_block: 13321721,
+  })
+  console.log('price2', price2)
+
+  // need to get date to block
+  const date = await Moralis.Web3API.native.getDateToBlock({
+    date: '2021-10-02',
+  })
+  console.log('date to block', date)
+
+  const data = {
+    labels: dates,
+    datasets: [
+      {
+        label: `Price for ${sym} in the last ${days} days.`,
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: prices,
+      },
+    ],
+  }
+
+  const config = {
+    type: 'line',
+    data: data,
+    options: {},
+  }
+
+  if (window.myChart instanceof Chart) {
+    myChart.destroy()
+  }
+
+  window.myChart = new Chart(document.getElementById('myChart'), config)
+}
+
 // DASHBOARD LISTENERS
 if (window.location.href == dashboard) {
   $('#get-transactions-link').on('click', displayTransactions)
@@ -928,7 +1002,7 @@ if (window.location.href == dashboard) {
 
   $('#portfolio-tracker-link').on('click', displayPortfolioTracker)
 
-  $('#tradin-alerts-link').on('click', displayTradingAlerts)
+  $('#trading-alerts-link').on('click', displayTradingAlerts)
 
   $('#transferERC20GetBalances').on('click', function () {
     $('#transferERC20BalanceTable').show()
@@ -957,6 +1031,11 @@ if (window.location.href == dashboard) {
 if (window.location.href == homepage) {
   document.querySelector('#btn-login').onclick = login
 }
+
+document.getElementById('week').onclick = priceHistory
+document.getElementById('2week').onclick = priceHistory
+document.getElementById('4week').onclick = priceHistory
+document.getElementById('list').onchange = priceHistory
 
 // open/close sidebar
 $('#sidebarMenuMinMaxButton').on('click', function () {
