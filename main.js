@@ -921,6 +921,7 @@ async function getMyTokenPortfolio() {
 
 async function getPriceHistory(chain, addrs, balance, decimals, name) {
   let currentPriceArray = []
+  let totalValueArray = []
 
   const priceObject = await Moralis.Web3API.token.getTokenPrice({
     chain: chain,
@@ -940,6 +941,7 @@ async function getPriceHistory(chain, addrs, balance, decimals, name) {
   }
   console.log('priceHistory', currentPrice)
   currentPriceArray.push(currentPrice)
+  totalValueArray.push(usdValue)
 
   // now that we have the current price of each token stored in an array of objects, we will loop through this array and display the data in a table
   for (i = 0; i < currentPriceArray.length; i++) {
@@ -954,12 +956,17 @@ async function getPriceHistory(chain, addrs, balance, decimals, name) {
       <tr>
       <td scope="col-md-3" class="portfolioTableItem">${currentPriceArray[i].name}</td>
       <td scope="col-md-3" class="portfolioTableItem">${tokenBalance}</td>
-      <td scope="col-md-3" class="portfolioTableItem">$${tokenPrice}</td>
-      <td scope="col-md-3" class="portfolioTableItem">$${usdValue}</td>
+      <td scope="col-md-3" class="portfolioTableItem">$ ${tokenPrice}</td>
+      <td scope="col-md-3" class="portfolioTableItem">$ ${usdValue}</td>
       </tr>
       `,
     )
   }
+  getHoldingValue(totalValueArray)
+}
+
+function getHoldingValue(totalValueArray) {
+  console.log('allholdings', totalValueArray)
 }
 
 // function to graph the price history of a token

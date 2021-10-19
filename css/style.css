@@ -155,7 +155,7 @@ h2 {
   margin-bottom: 20px;
 }
 .portfolioTableItem {
-  align-items: left;
+  align-items: right;
   display: inline-table;
   padding-right: 20px;
   margin-left: 15px;
