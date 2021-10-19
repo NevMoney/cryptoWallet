@@ -906,7 +906,7 @@ async function getMyTokenPortfolio() {
   let chain = identifyChain()
 
   let tokens = await Moralis.Web3API.account.getTokenBalances({ chain: chain })
-  console.log('tokens', tokens)
+  // console.log('tokens', tokens)
 
   //tokens will return an array of objects and each object will give us the token address, balance, decimals, and name. We will loop through this to get the price of each token
 
@@ -919,9 +919,11 @@ async function getMyTokenPortfolio() {
   })
 }
 
+let totalValueArray = []
+let portfolioValue
+
 async function getPriceHistory(chain, addrs, balance, decimals, name) {
   let currentPriceArray = []
-  let totalValueArray = []
 
   const priceObject = await Moralis.Web3API.token.getTokenPrice({
     chain: chain,
@@ -939,7 +941,7 @@ async function getPriceHistory(chain, addrs, balance, decimals, name) {
     price: price,
     usdValue: usdValue,
   }
-  console.log('priceHistory', currentPrice)
+  // console.log('priceHistory', currentPrice)
   currentPriceArray.push(currentPrice)
   totalValueArray.push(usdValue)
 
@@ -962,11 +964,20 @@ async function getPriceHistory(chain, addrs, balance, decimals, name) {
       `,
     )
   }
+
   getHoldingValue(totalValueArray)
 }
 
-function getHoldingValue(totalValueArray) {
-  console.log('allholdings', totalValueArray)
+async function getHoldingValue(totalValueArray) {
+  let totalValue = totalValueArray.reduce((a, b) => a + b, 0)
+  // get the final calculation
+  portfolioValue = totalValue
+
+  setTimeout(function () {
+    $('#totalPortfolioValue').html(
+      `TOTAL HOLDING: $${portfolioValue.toFixed(2)}.`,
+    )
+  }, 1000)
 }
 
 // function to graph the price history of a token
@@ -1080,7 +1091,9 @@ if (window.location.href == dashboard) {
 
   $('#searchTokenPriceBtn').on('click', launch)
 
-  $('#showMyPortfolioBtn').on('click', getMyTokenPortfolio)
+  $('#showMyPortfolioBtn').on('click', function () {
+    getMyTokenPortfolio()
+  })
 
   $('#btn-clear-screen').on('click', function () {
     // clear the screen
