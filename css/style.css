@@ -144,7 +144,7 @@ h2 {
 /* take dynamically created content inside .portfolioTableItem and space out to match #portfolioTable spacing */
 
 #portfolioTable {
-  display: table-row-group;
+  display: table;
   flex-flow: column;
   justify-content: space-evenly;
   align-items: left;
@@ -157,8 +157,8 @@ h2 {
 .portfolioTableItem {
   align-items: left;
   display: inline-table;
-  padding-left: 20px;
-  margin-left: 10px;
-  margin-right: 10px;
-  width: 15%;
+  padding-right: 20px;
+  margin-left: 15px;
+  margin-right: 5px;
+  width: 19%;
 }
