@@ -49,7 +49,8 @@ async function listAvailableTokens() {
   const result = await Moralis.Plugins.oneInch.getSupportedTokens({
     chain: chain, // The blockchain you want to use (eth/bsc/polygon)
   })
-  tokens = result.result.tokens
+  // console.log('TESTING THIS', result.tokens)
+  tokens = result.tokens
 
   let parent = document.getElementById('token_list')
 

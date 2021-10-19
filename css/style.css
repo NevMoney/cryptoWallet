@@ -133,3 +133,32 @@ h2 {
 #sidebarMenuMinMaxButton:hover {
   background-color: rgb(211, 211, 211);
 }
+
+/* place .spinner in the center */
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+/* take dynamically created content inside .portfolioTableItem and space out to match #portfolioTable spacing */
+
+#portfolioTable {
+  display: table-row-group;
+  flex-flow: column;
+  justify-content: space-evenly;
+  align-items: left;
+  padding: 10px;
+  box-sizing: border-box;
+  box-shadow: gray 0px 0px 10px 0px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.portfolioTableItem {
+  align-items: left;
+  display: inline-table;
+  padding-left: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 15%;
+}

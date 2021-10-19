@@ -38,7 +38,8 @@
 
     <!-- MORALIS -->
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-    <script src="https://npmcdn.com/moralis@0.0.44/dist/moralis.js"></script>
+    <!-- <script src="https://npmcdn.com/moralis@0.0.44/dist/moralis.js"></script> -->
+    <script src="https://npmcdn.com/moralis@0.0.61/dist/moralis.js"></script>
 
     <!-- Custom styles for this template -->
   </head>
@@ -902,19 +903,53 @@
 
             <!-- Portfolio Tracker -->
             <div id="portfolioTracker" class="col-md-12">
-              <h2>Track Your Portfolio</h2>
+              <h2>Portfolio Tracker</h2>
               <div>
                 <p class="m-3 text-center h6">
-                  Smart investors know that they must track the performance of
-                  their portfolio. Here is an easy way for you to do that.
+                  As an investor, it is imperative that you know price movement. A crucial key to success is understanding the direction in which the price is moving. For a quick and easy visual, select the token and date range below.
+                </p>
+                <p class="m-3 text-center text-large">
+                  For more in-depth analysis and on-chart market tools, we recommend using Trading View.
                 </p>
                 <br>
+                <button
+                  class="btn btn-primary col-md-3"
+                  id="showMyPortfolioBtn">
+                  Show My Portfolio
+                </button>
+                <button
+                  class="btn btn-primary col-md-3"
+                  id="searchTokenPriceBtn">
+                  Search Token Price
+                </button>
+                <button
+                  class="btn btn-primary col-md-3"
+                  name="table-of-transactions"
+                  id="btn-clear-screen"
+                >
+                  Clear Screen
+                </button>
+                <hr/>
                 <input type="radio" name="time" id="week" value="7" checked>7 days</input>
                 <input type="radio" name="time" id="2week" value="14" >14 days</input>
                 <input type="radio" name="time" id="4week" value="30" >30 days</input>
                 <select id="list"></select>
 
                 <div>
+                   <!-- spinner -->
+                   <div class="spinner spinner-border text-primary text-center" role="status" style="display: none;"></div>
+                   <div id="portfolioTable" class="table">
+                     <table class="table">
+                       <thead>
+                         <tr>
+                           <th scope="col">Token</th>
+                           <th scope="col">Balance</th>
+                           <th scope="col">Current Price</th>
+                           <th scope="col">USD Value</th>
+                        </tr>
+                       </thead>
+                     </table>
+                   </div>
                   <canvas id="myChart"></canvas>
                 </div>
               </div>

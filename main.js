@@ -21,21 +21,6 @@ if (currentUser) {
   document.getElementById('swap_button').disabled = false
 }
 
-// redirect based on whether they are logged in
-;(function () {
-  // if they are NOT authenticated and NOT on the homepage
-  if (Moralis.User.current() == null && window.location.pathname != homepage) {
-    document.querySelector('body').style.display = 'none'
-    window.location.href = homepage
-  }
-  if (
-    (Moralis.User.current() != null && window.location.pathname == homepage) ||
-    window.location.pathname == '/'
-  ) {
-    window.location.href = dashboard
-  }
-})()
-
 //HELPER FUNCTIONS
 const login = async () => {
   let user = Moralis.User.current()
@@ -283,7 +268,7 @@ const getERC20Balances = async () => {
   let chain = identifyChain()
 
   let tokens = await Moralis.Web3API.account.getTokenBalances({ chain: chain })
-  console.log('tokens', tokens)
+  // console.log('tokens', tokens)
   let otherBalancesContent = document.querySelector('#otherBalances')
   otherBalancesContent.innerHTML = ''
 
@@ -622,7 +607,7 @@ const displaySwapTokens = () => {
 
 const displayPortfolioTracker = () => {
   renderContent('#portfolioTracker')
-  launch()
+  // launch()
 }
 
 const displayTradingAlerts = () => {
@@ -901,57 +886,129 @@ const transferNFTs = async () => {
 
 // PORTFOLIO FUNCTIONS
 async function launch() {
+  $('.spinner').show()
   let response = await fetch('https://gateway.ipfs.io/ipns/tokens.uniswap.org')
   let names = await response.json()
   toks = names.tokens
 
+  // instead of the above fetching tokens from uniswap, we can grab user's tokens to for selection
+
+  // additionally, we can grab all tokens and amounts and creating an agregate list of all tokens, amounts and prices to display in a chart
+
   toks.forEach((e, i) =>
     document.getElementById('list').add(new Option(e.symbol, i)),
   )
-
   priceHistory()
 }
 
-launch()
+// function to get all user's tokens and their balances and then push those into priceHistory() for charting
+async function getMyTokenPortfolio() {
+  let chain = identifyChain()
 
+  let tokens = await Moralis.Web3API.account.getTokenBalances({ chain: chain })
+  console.log('tokens', tokens)
+
+  //tokens will return an array of objects and each object will give us the token address, balance, decimals, and name. We will loop through this to get the price of each token
+
+  tokens.forEach((e, i) => {
+    let addrs = e.token_address
+    let balance = e.balance
+    let decimals = e.decimals
+    let name = e.name
+    getPriceHistory(chain, addrs, balance, decimals, name)
+  })
+}
+
+async function getPriceHistory(chain, addrs, balance, decimals, name) {
+  let currentPriceArray = []
+
+  const priceObject = await Moralis.Web3API.token.getTokenPrice({
+    chain: chain,
+    address: addrs,
+  })
+  let price = priceObject.usdPrice
+
+  // calculate the USD value of each token based on the amount the user holds
+  let usdValue = (balance * price) / ('1e' + decimals)
+
+  let currentPrice = {
+    name: name,
+    balance: balance,
+    decimals: decimals,
+    price: price,
+    usdValue: usdValue,
+  }
+  console.log('priceHistory', currentPrice)
+  currentPriceArray.push(currentPrice)
+
+  // now that we have the current price of each token stored in an array of objects, we will loop through this array and display the data in a table
+  for (i = 0; i < currentPriceArray.length; i++) {
+    let tokenBalance =
+      currentPriceArray[i].balance / ('1e' + currentPriceArray[i].decimals)
+    tokenBalance = tokenBalance.toFixed(6)
+    let tokenPrice = currentPriceArray[i].price.toFixed(4)
+    let usdValue = currentPriceArray[i].usdValue.toFixed(6)
+    //  grab table element and append the data to it, making sure it adheres to the table structure and spacing (using jquery)
+    $('#portfolioTable').append(
+      `
+      <tr>
+      <td scope="col-md-3" class="portfolioTableItem">${currentPriceArray[i].name}</td>
+      <td scope="col-md-3" class="portfolioTableItem">${tokenBalance}</td>
+      <td scope="col-md-3" class="portfolioTableItem">$${tokenPrice}</td>
+      <td scope="col-md-3" class="portfolioTableItem">$${usdValue}</td>
+      </tr>
+      `,
+    )
+  }
+}
+
+// function to graph the price history of a token
 async function priceHistory() {
+  $('.spinner').show()
   let chain = identifyChain()
   let days = document.querySelector('input[name="time"]:checked').value
   let i = document.getElementById('list').value
   let addrs = toks[i].address
   let sym = toks[i].symbol
+  let today = new Date()
 
-  console.log('priceHistory', days, addrs, sym)
+  let dates = []
+  let blocks = []
+  let prices = []
 
-  //Boiler plate examples
-  let dates = ['2021-09-30', '2021-10-01', '2021-10-02', '2021-10-03']
-  let blocks = [13321721, 13331721, 13341721]
-  let prices = [4, 6, 3]
-  //Boiler plate examples
+  // then take the input of days from user and calculate the dates. For example, if user inputs 7 days, then the dates will be 7 days before today
+  let startDate = new Date(today.setDate(today.getDate() - days))
 
-  //Get token price
-  const price = await Moralis.Web3API.token.getTokenPrice({ address: addrs })
-  console.log('price', price)
+  // insert those dates into dates array
+  for (let i = 0; i < days; i++) {
+    let date = new Date(startDate.setDate(startDate.getDate() + 1))
+    let dateString = date.toISOString().split('T')[0]
+    dates.push(dateString)
+    // console.log('dates', dates)
 
-  // token price at specific block
-  const price2 = await Moralis.Web3API.token.getTokenPrice({
-    address: addrs,
-    to_block: 13321721,
-  })
-  console.log('price2', price2)
+    const dateToBlock = await Moralis.Web3API.native.getDateToBlock({
+      date: dateString,
+    })
+    let block = dateToBlock.block
+    blocks.push(block)
+    // console.log('blocks', blocks)
 
-  // need to get date to block
-  const date = await Moralis.Web3API.native.getDateToBlock({
-    date: '2021-10-02',
-  })
-  console.log('date to block', date)
+    const priceObject = await Moralis.Web3API.token.getTokenPrice({
+      chain: chain,
+      address: addrs,
+      to_block: blocks[i],
+    })
+    let price = priceObject.usdPrice
+    prices.push(price)
+    // console.log('prices', prices)
+  }
 
   const data = {
     labels: dates,
     datasets: [
       {
-        label: `Price for ${sym} in the last ${days} days.`,
-        backgroundColor: 'rgb(255, 99, 132)',
+        label: `${sym} prices over the last ${days} days in USD.`,
+        backgroundColor: 'rgba(0,0,0,0.025)',
         borderColor: 'rgb(255, 99, 132)',
         data: prices,
       },
@@ -968,6 +1025,7 @@ async function priceHistory() {
     myChart.destroy()
   }
 
+  $('.spinner').hide()
   window.myChart = new Chart(document.getElementById('myChart'), config)
 }
 
@@ -1012,6 +1070,16 @@ if (window.location.href == dashboard) {
   $('#ERC20MetadataSearchByAddress').on('click', getERC20MetadataByAddress)
 
   $('#show-ERC20-metadata').on('click', displayERC20Metadata)
+
+  $('#searchTokenPriceBtn').on('click', launch)
+
+  $('#showMyPortfolioBtn').on('click', getMyTokenPortfolio)
+
+  $('#btn-clear-screen').on('click', function () {
+    // clear the screen
+    $('#myChart').hide()
+    $('#list').empty()
+  })
 
   // Class listeners
   let buttons = $('.clearButton')
